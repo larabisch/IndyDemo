@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="indyViewModel"
+            type="com.example.indydemo.indy.IndyViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".indy.IndyFragment"
+        android:background="#EFEFEF" >
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/credential_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/initializeDemoButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_baseline_add_24"
+            app:layout_constraintBottom_toTopOf="@+id/initializeDemoButton"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/requestIdentityButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Request Identity Credential"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/addButton"
+            app:layout_constraintEnd_toEndOf="@+id/addButton"
+            android:enabled="@{indyViewModel.initialisationDone}" />
+
+        <Button
+            android:id="@+id/requestDegreeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request Degree Credential"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/requestIdentityButton"
+            app:layout_constraintEnd_toEndOf="@+id/requestIdentityButton"
+            tools:visibility="visible"
+            android:enabled="@{indyViewModel.identificationDone}"  />
+
+        <Button
+            android:id="@+id/applyJobButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apply for a Job"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/requestDegreeButton"
+            app:layout_constraintEnd_toEndOf="@+id/requestDegreeButton"
+            tools:visibility="visible"
+            android:enabled="@{indyViewModel.degreeCredentialDone}"  />
+
+        <Button
+            android:id="@+id/requestLoanButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request a Loan"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/applyJobButton"
+            app:layout_constraintEnd_toEndOf="@+id/applyJobButton"
+            tools:visibility="visible"
+            android:enabled="@{indyViewModel.jobCredentialDone}"  />
+
+        <Button
+            android:id="@+id/initializeDemoButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Initialize Demo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"  />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

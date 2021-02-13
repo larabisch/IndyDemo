@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
+    app:startDestination="@id/indyFragment">
+
+    <fragment
+        android:id="@+id/indyFragment"
+        android:name="com.example.indydemo.indy.IndyFragment"
+        android:label="IndyFragment"
+        tools:layout="@layout/fragment_indy">
+        <action
+            android:id="@+id/action_indyFragment_to_credentialDetailFragment"
+            app:destination="@id/credentialDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/credentialDetailFragment"
+        android:name="com.example.indydemo.indy.credential_detail.CredentialDetailFragment"
+        android:label="CredentialDetailFragment"
+        tools:layout="@layout/fragment_credential_detail" >
+        <action
+            android:id="@+id/action_credentialDetailFragment_to_indyFragment"
+            app:destination="@id/indyFragment" />
+        <argument
+            android:name="credentialKey"
+            app:argType="integer" />
+    </fragment>
+</navigation>
