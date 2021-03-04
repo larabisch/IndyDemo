@@ -1,0 +1,37 @@
+@startuml
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: Another authentication Response
+@enduml
+
+
+@startuml
+title Example Title
+autonumber
+
+== Initialization ==
+Bob -> Alice : Authentication Request
+
+== Repetition ==
+Bob <- Alice : Authentication Response
+@enduml
+
+
+@startuml
+Alice->Bob : hello
+note left: this is a first note
+
+Bob->Alice : ok
+note right: this is another note
+
+Bob->Bob : I am thinking
+note left
+a note
+can also be defined
+on several lines
+end note
+@enduml
+
+
