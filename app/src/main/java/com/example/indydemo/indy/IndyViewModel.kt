@@ -19,13 +19,6 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
     val indy = Indy()
 
 
-    private val _navigateToCredentialDetail = MutableLiveData<Int>()
-    val navigateToCredentialDetail
-        get() = _navigateToCredentialDetail
-    fun onItemClicked(credentialId: Int) { _navigateToCredentialDetail.value = credentialId }
-    fun onCredentialDetailNavigated() { _navigateToCredentialDetail.value = null }
-
-
 
     private val _initialisationDone = MutableLiveData<Boolean>()
     val initialisationDone

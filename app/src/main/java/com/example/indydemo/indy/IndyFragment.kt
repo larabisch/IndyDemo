@@ -211,15 +211,8 @@ class IndyFragment : Fragment() {
 
 
 
-
-
-
-
-
         // bind the adapter of the recycler view and set the ClickListener for clicking on an item
-        val adapter = WalletAdapter(CredentialListener {
-            credentialId -> indyViewModel.onItemClicked(credentialId)
-        })
+        val adapter = WalletAdapter()
         binding.credentialList.adapter = adapter
 
         // tell the adapter what data should be adapted
@@ -229,14 +222,7 @@ class IndyFragment : Fragment() {
             }
         })
 
-/*        // navigate to detail view of credential
-        indyViewModel.navigateToCredentialDetail.observe(viewLifecycleOwner, Observer { credential ->
-            credential?.let {
-                this.findNavController().navigate(IndyFragmentDirections
-                    .actionIndyFragmentToCredentialDetailFragment(credential))
-                indyViewModel.onCredentialDetailNavigated()
-            }
-        })*/
+
 
         return binding.root
     }
