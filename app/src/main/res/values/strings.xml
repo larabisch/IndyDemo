@@ -1,3 +1,64 @@
 <resources>
     <string name="app_name">IndyDemo</string>
+
+    <string name="twigbit_ident_drop_in_attach_card">Please hold your ID card against the back of your smartphone for the entire
+        process against the
+        NFC sensor of your smartphone.
+    </string>
+    <string name="twigbit_ident_drop_in_error_button">Welcome, we will now guide you through the identification
+        process. Please
+        hold your ID card against the back of your smartphone.
+    </string>
+    <string name="twigbit_ident_drop_in_intro_button">Start</string>
+    <string name="twigbit_ident_drop_in_accept">Accept</string>
+    <string name="twigbit_ident_drop_in_deny">Deny</string>
+    <string name="twigbit_ident_drop_in_finish">Finish</string>
+    <string name="twigbit_ident_drop_in_enter_can">Please enter your CAN:</string>
+    <string name="twigbit_ident_drop_in_enter_pin">Please enter your PIN:</string>
+    <string name="twigbit_ident_drop_in_enter_puk">Please enter your PUK:</string>
+    <string name="twigbit_ident_drop_in_success">Your data has been read successfully.
+    </string>
+    <string name="twigbit_ident_drop_in_error">An error occurred.</string>
+    <string name="twigbit_ident_drop_in_intro">Welcome, we will now guide you through the identification
+        process. Please
+        hold your ID card against the back of your smartphone.
+    </string>
+    <string name="twigbit_ident_drop_in_continue">Continue</string>
+
+    <string name="twigbit_ident_access_right_address">Address</string>
+    <string name="twigbit_ident_access_right_birth_name">Birth name</string>
+    <string name="twigbit_ident_access_right_family_name">Family name</string>
+    <string name="twigbit_ident_access_right_given_names">Given name</string>
+    <string name="twigbit_ident_access_right_place_of_birth">Place of birth</string>
+    <string name="twigbit_ident_access_right_date_of_birth">Date of birth</string>
+    <string name="twigbit_ident_access_right_doctoral_degree">Doctoral degree</string>
+    <string name="twigbit_ident_access_right_artistic_name">Artistic name</string>
+    <string name="twigbit_ident_access_right_pseudonym">Pseudonym</string>
+    <string name="twigbit_ident_access_right_valid_until">Valid until</string>
+    <string name="twigbit_ident_access_right_nationality">Nationality</string>
+    <string name="twigbit_ident_access_right_issuing_country">Issuing country</string>
+    <string name="twigbit_ident_access_right_document_type">Document type</string>
+    <string name="twigbit_ident_access_right_residence_permit_i">Residence permit</string>
+    <string name="twigbit_ident_access_right_residence_permit_ii">Residence permit 2</string>
+    <string name="twigbit_ident_access_right_community_id">community_id</string>
+    <string name="twigbit_ident_access_right_address_verification">Address verification</string>
+    <string name="twigbit_ident_access_right_age_verification">Age verification</string>
+    <string name="twigbit_ident_access_right_unknown_value">Unbekannter Wert</string>
+
+    <string name="twigbit_ident_certificate_service_provider_info">Service Provider Information</string>
+    <string name="twigbit_ident_certificate_service_provider">Service Provider</string>
+    <string name="twigbit_ident_certificate_issuer">Issuer of the authorization certificate</string>
+    <string name="twigbit_ident_certificate_purpose">Purpose</string>
+    <string name="twigbit_ident_certificate_validity">Validity</string>
+    <string name="twigbit_ident_certificate_information">Certificate Information</string>
+
+    <string name="twigbit_ident_drop_in_access_rights_header">The following service provider would like to
+        verify you identity:
+    </string>
+    <string name="twigbit_ident_drop_in_service_provider">Service Provider</string>
+    <string name="twigbit_ident_drop_in_access_rights_purpose">Purpose</string>
+    <string name="twigbit_ident_drop_in_attribute_header">The following attributes are read</string>
+    <string name="twigbit_ident_drop_in_attributes">Attributes</string>
+    <string name="twigbit_ident_drop_in_logo_content_description">Logo of the Service Provider</string>
+
 </resources>

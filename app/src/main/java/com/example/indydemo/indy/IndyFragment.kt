@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.indydemo.R
 import com.example.indydemo.databinding.FragmentIndyBinding
 import com.example.indydemo.database.CredentialDatabase
+import com.example.indydemo.ident.IdentityViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
@@ -21,25 +23,24 @@ class IndyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
-        // building the binding
         val binding: FragmentIndyBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_indy, container, false
         )
 
-        // building the ViewModelFactory
         val application = requireNotNull(this.activity).application
         val dataSource = CredentialDatabase.getInstance(application).credentialDao
         val viewModelFactory = IndyViewModelFactory(dataSource, requireContext(), application)
 
-        // building the ViewModel
         val indyViewModel = ViewModelProvider(this, viewModelFactory)
             .get(IndyViewModel::class.java)
 
+        val identityViewModel: IdentityViewModel by activityViewModels()
+
+        binding.identityViewModel = identityViewModel
         binding.indyViewModel = indyViewModel
         binding.lifecycleOwner = this
 
         val loadingDialog = LoadingDialog(requireActivity())
-
 
 
         binding.initializeDemoButton.setOnClickListener {
@@ -50,22 +51,20 @@ class IndyFragment : Fragment() {
         indyViewModel.initialisationDone.observe(viewLifecycleOwner, {
             if (it == true) {
                 loadingDialog.dismissDialog()
+                identityViewModel.setIdentityButtonVisible()
             }
         })
 
-
-
         binding.requestIdentityButton.setOnClickListener {
-            val builder = MaterialAlertDialogBuilder(requireContext())
-            builder.setTitle("Do you want to request your Identity-Credential?")
-            builder.setMessage("")
-            builder.setPositiveButton("Yes") { _, _ ->
+            this.findNavController().navigate(R.id.action_indyFragment_to_introFragment)
+        }
+
+        identityViewModel.identificationDone.observe(viewLifecycleOwner, {
+            if (it == true) {
                 loadingDialog.startLoadingDialog()
                 indyViewModel.identityCertificate()
             }
-            builder.setNegativeButton("No") { _, _ -> }
-            builder.show()
-        }
+        })
 
         indyViewModel.identificationDone.observe(viewLifecycleOwner, {
             if (it == true) {
@@ -73,8 +72,6 @@ class IndyFragment : Fragment() {
                 indyViewModel.identificationFinished()
             }
         })
-
-
 
         binding.requestDegreeButton.setOnClickListener {
             if (indyViewModel.proofRequestDegreeDone.value == true) {
@@ -123,8 +120,6 @@ class IndyFragment : Fragment() {
             }
         })
 
-
-
         binding.applyJobButton.setOnClickListener {
             if (indyViewModel.proofRequestJobDone.value == true) {
                 val builder = MaterialAlertDialogBuilder(requireContext())
@@ -172,8 +167,6 @@ class IndyFragment : Fragment() {
             }
         })
 
-
-
         binding.requestLoanButton.setOnClickListener {
             val builder = MaterialAlertDialogBuilder(requireContext())
             builder.setTitle("Create a Proof-Request for Loan-Application?")
@@ -202,15 +195,6 @@ class IndyFragment : Fragment() {
 
 
 
-
-
-
-
-
-
-
-
-
         // bind the adapter of the recycler view and set the ClickListener for clicking on an item
         val adapter = WalletAdapter()
         binding.credentialList.adapter = adapter
@@ -221,7 +205,6 @@ class IndyFragment : Fragment() {
                 adapter.submitList(it)
             }
         })
-
 
 
         return binding.root

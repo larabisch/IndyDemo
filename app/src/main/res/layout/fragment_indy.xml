@@ -8,6 +8,9 @@
         <variable
             name="indyViewModel"
             type="com.example.indydemo.indy.IndyViewModel" />
+        <variable
+            name="identityViewModel"
+            type="com.example.indydemo.ident.IdentityViewModel" />
 
     </data>
 
@@ -49,7 +52,7 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/addButton"
             app:layout_constraintEnd_toEndOf="@+id/addButton"
-            android:enabled="@{indyViewModel.initialisationDone}" />
+            android:enabled="@{identityViewModel.identificationVisible}" />
 
         <Button
             android:id="@+id/requestDegreeButton"

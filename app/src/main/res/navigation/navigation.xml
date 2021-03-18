@@ -9,6 +9,60 @@
         android:name="com.example.indydemo.indy.IndyFragment"
         android:label="IndyFragment"
         tools:layout="@layout/fragment_indy">
+        <action
+            android:id="@+id/action_indyFragment_to_introFragment"
+            app:destination="@id/introFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/introFragment"
+        android:name="com.example.indydemo.ident.IntroFragment"
+        android:label="IntroFragment"
+        tools:layout="@layout/fragment_intro" >
+        <action
+            android:id="@+id/action_introFragment_to_authorisationFragment"
+            app:destination="@id/authorisationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authorisationFragment"
+        android:name="com.example.indydemo.ident.AuthorisationFragment"
+        android:label="AuthorisationFragment"
+        tools:layout="@layout/fragment_authorisation" >
+        <action
+            android:id="@+id/action_authorisationFragment_to_accessRightsFragment"
+            app:destination="@id/accessRightsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accessRightsFragment"
+        android:name="com.example.indydemo.ident.AccessRightsFragment"
+        android:label="AccessRightsFragment"
+        tools:layout="@layout/fragment_access_rights">
+        <action
+            android:id="@+id/action_accessRightsFragment_to_certificateFragment"
+            app:destination="@id/certificateFragment" />
+        <action
+            android:id="@+id/action_accessRightsFragment_to_successFragment"
+            app:destination="@id/successFragment" />
+        <action
+            android:id="@+id/action_accessRightsFragment_to_indyFragment"
+            app:destination="@id/indyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/certificateFragment"
+        android:name="com.example.indydemo.ident.CertificateFragment"
+        android:label="CertificateFragment"
+        tools:layout="@layout/fragment_certificate">
+        <action
+            android:id="@+id/action_certificateFragment_to_accessRightsFragment"
+            app:destination="@id/accessRightsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/successFragment"
+        android:name="com.example.indydemo.ident.SuccessFragment"
+        android:label="SuccessFragment"
+        tools:layout="@layout/fragment_success" >
+        <action
+            android:id="@+id/action_successFragment_to_indyFragment"
+            app:destination="@id/indyFragment" />
     </fragment>
 
 </navigation>
