@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.navigation.fragment.findNavController
 import com.example.indydemo.R
+import com.example.indydemo.database.ServiceProvider
 
 
 class CertificateFragment : Fragment() {
@@ -31,11 +32,11 @@ class CertificateFragment : Fragment() {
         val textServiceProviderInfo = view.findViewById<View>(R.id.textServiceProviderInfo) as TextView
         val textValidity = view.findViewById<View>(R.id.textValidity) as TextView
 
-        textIssuerName.text = "Demo Issuer"
-        textServiceProviderName.text = "Indy Demo Corp."
-        textPurpose.text = "Creating an Identity-Certificate"
-        textServiceProviderInfo.text = "Identity Credential on Hyperledger Indy"
-        textValidity.text = "20.01.2020 - 31.12.2021"
+        textIssuerName.text = ServiceProvider.issuer
+        textServiceProviderName.text = ServiceProvider.serviceProvider
+        textPurpose.text = ServiceProvider.purpose
+        textServiceProviderInfo.text = ServiceProvider.serviceProviderInfo
+        textValidity.text = ServiceProvider.validity
 
         buttonBack.setOnClickListener {
             this.findNavController().navigate(R.id.action_certificateFragment_to_accessRightsFragment)

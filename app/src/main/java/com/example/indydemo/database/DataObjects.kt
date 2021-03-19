@@ -1,5 +1,14 @@
 package com.example.indydemo.database
 
+object ServiceProvider {
+    const val serviceProvider = "Indy Demo Corp."
+    const val purpose = "Creating an Identity-Certificate on Hyperledger Indy"
+    const val serviceProviderInfo = "Hyperledger Indy"
+    const val validity = "20.01.2020 - 31.12.2021"
+    const val issuer = "Demo Issuer"
+
+}
+
 object IdentityCredential {
     const val document = "Passport"
     const val issuer = "Government"
@@ -11,7 +20,7 @@ object IdentityCredential {
     const val attribute2_value = "Alice"
 
     const val attribute3_name = "Date of birth"
-    const val attribute3_value = "12.08.1964"
+    const val attribute3_value = "12.08.1981"
 
     const val attribute4_name = "Address"
     const val attribute4_value = "Sample street 12, 12059 Berlin"

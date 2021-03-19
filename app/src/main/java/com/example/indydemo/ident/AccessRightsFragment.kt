@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.navigation.fragment.findNavController
 import com.example.indydemo.R
+import com.example.indydemo.database.IdentityCredential
+import com.example.indydemo.database.ServiceProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.ArrayList
 
@@ -54,24 +56,17 @@ class AccessRightsFragment : Fragment() {
         }
 
         val accessRights = ArrayList<String>()
-        accessRights.add("Address")
-        accessRights.add("Birth name")
-        accessRights.add("Family name")
-        accessRights.add("Given names")
-        accessRights.add("Place of birth")
-        accessRights.add("Date of birth")
-        accessRights.add("Doctoral degree")
-        accessRights.add("Artistic name")
-        accessRights.add("Pseudonym")
-        accessRights.add("ValidUntil")
-        accessRights.add( "Nationality")
-        accessRights.add("Issuing country")
         accessRights.add("Document type")
+        accessRights.add(IdentityCredential.attribute1_name)
+        accessRights.add(IdentityCredential.attribute2_name)
+        accessRights.add(IdentityCredential.attribute3_name)
+        accessRights.add(IdentityCredential.attribute4_name)
+        accessRights.add(IdentityCredential.attribute5_name)
 
         recyclerView.adapter = MyAdapter(accessRights)
 
-        textServiceProvider.text = "Indy Demo Corp."
-        textPurpose.text = "Creating an Identity-Certificate"
+        textServiceProvider.text = ServiceProvider.serviceProvider
+        textPurpose.text = ServiceProvider.purpose
 
         return view
     }
