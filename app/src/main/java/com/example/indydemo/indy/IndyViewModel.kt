@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class IndyViewModel (val database: CredentialDao, context: Context, application: Application) : AndroidViewModel(application)  {
+class IndyViewModel (val database: CredentialDao, context: Context, application: Application)
+    : AndroidViewModel(application)  {
 
 
     val allCredentials = database.getAllCredentials()
@@ -19,25 +20,16 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
     val indy = Indy()
 
 
-    private val _addButtonIsClicked = MutableLiveData<Boolean>().apply {
-        value = true
+    init {
+        viewModelScope.launch { deleteAll() }
     }
+
+
+    private val _addButtonIsClicked = MutableLiveData<Boolean>().apply { value = true }
     val addButtonIsClicked
         get() = _addButtonIsClicked
-
-    fun closeAnimationDone() {
-        _addButtonIsClicked.value = true
-    }
-    fun openAnimationDone() {
-        _addButtonIsClicked.value = false
-    }
-
-    init {
-        viewModelScope.launch {
-            deleteAll()
-        }
-    }
-
+    fun closeAnimationDone() { _addButtonIsClicked.value = true }
+    fun openAnimationDone() { _addButtonIsClicked.value = false }
 
     private val _initialisationDone = MutableLiveData<Boolean>()
     val initialisationDone
@@ -77,7 +69,6 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
         get() = _proofRequestLoanDone
     private fun proofRequestLoanSuccess() { _proofRequestLoanDone.value = true }
     fun loanFinished()  { _jobCredentialDone.value = false }
-
 
 
     private fun setVariables() {
@@ -330,15 +321,16 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
     }
 
 
-
-
-
     private suspend fun insert(cred: Credential) {
-        withContext(Dispatchers.IO) { database.insert(cred) }
+        withContext(Dispatchers.IO) {
+            database.insert(cred)
+        }
     }
 
     private suspend fun deleteAll() {
-        withContext(Dispatchers.IO) {database.deleteAll()}
+        withContext(Dispatchers.IO) {
+            database.deleteAll()
+        }
     }
 
 }

@@ -6,7 +6,6 @@ object ServiceProvider {
     const val serviceProviderInfo = "Hyperledger Indy"
     const val validity = "20.01.2020 - 31.12.2021"
     const val issuer = "Demo Issuer"
-
 }
 
 object IdentityCredential {
@@ -20,7 +19,7 @@ object IdentityCredential {
     const val attribute2_value = "Alice"
 
     const val attribute3_name = "Date of birth"
-    const val attribute3_value = "12.08.1981"
+    const val attribute3_value = "1964-08-12"
 
     const val attribute4_name = "Address"
     const val attribute4_value = "Sample street 12, 12059 Berlin"
