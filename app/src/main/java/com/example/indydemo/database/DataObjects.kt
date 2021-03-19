@@ -25,11 +25,11 @@ object DegreeCredential {
     const val document = "Bachelor-Certificate"
     const val issuer = "University"
 
-    const val attribute1_name = "Family name"
-    const val attribute1_value = "Garcia"
+    const val attribute1_name = "Specialization"
+    const val attribute1_value = "Computer science"
 
     const val attribute2_name = "Degree"
-    const val attribute2_value = "Bachelor of Science, Marketing"
+    const val attribute2_value = "Bachelor of Science"
 
     const val attribute3_name = "Status"
     const val attribute3_value = "Graduated"

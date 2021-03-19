@@ -48,35 +48,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:enabled="@{identityViewModel.identificationVisible}"
             android:text="Request Identity Credential"
             android:textSize="12sp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/addButton"
             app:layout_constraintEnd_toEndOf="@+id/addButton"
-            android:enabled="@{identityViewModel.identificationVisible}" />
+            tools:visibility="visible" />
 
         <Button
             android:id="@+id/requestDegreeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="@{indyViewModel.identificationDone}"
             android:text="Request Degree Credential"
             android:textSize="12sp"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/requestIdentityButton"
             app:layout_constraintEnd_toEndOf="@+id/requestIdentityButton"
-            tools:visibility="visible"
-            android:enabled="@{indyViewModel.identificationDone}"  />
+            tools:visibility="visible" />
 
         <Button
             android:id="@+id/applyJobButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="@{indyViewModel.degreeCredentialDone}"
             android:text="Apply for a Job"
             android:textSize="12sp"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/requestDegreeButton"
             app:layout_constraintEnd_toEndOf="@+id/requestDegreeButton"
-            tools:visibility="visible"
-            android:enabled="@{indyViewModel.degreeCredentialDone}"  />
+            tools:visibility="visible" />
 
         <Button
             android:id="@+id/requestLoanButton"
@@ -85,7 +87,7 @@
             android:enabled="@{indyViewModel.jobCredentialDone}"
             android:text="Apply for a Loan"
             android:textSize="12sp"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/applyJobButton"
             app:layout_constraintEnd_toEndOf="@+id/applyJobButton"
             tools:visibility="visible" />

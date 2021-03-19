@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,6 +20,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class IndyFragment : Fragment() {
+
+    private val fromButton: Animation by lazy { AnimationUtils.loadAnimation(activity, R.anim.from_button_anim) }
+    private val toButton: Animation by lazy { AnimationUtils.loadAnimation(activity, R.anim.to_button_anim) }
+    private val openAnim: Animation by lazy { AnimationUtils.loadAnimation(activity, R.anim.rotate_open_anim) }
+    private val closeAnim: Animation by lazy { AnimationUtils.loadAnimation(activity, R.anim.rotate_close_anim) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -205,6 +212,44 @@ class IndyFragment : Fragment() {
                 adapter.submitList(it)
             }
         })
+
+
+
+        // setting up animation
+        binding.addButton.setOnClickListener {
+            if (indyViewModel.addButtonIsClicked.value == true){
+                binding.requestIdentityButton.visibility = View.VISIBLE
+                binding.requestIdentityButton.startAnimation(fromButton)
+
+                binding.requestDegreeButton.visibility = View.VISIBLE
+                binding.requestDegreeButton.startAnimation(fromButton)
+
+                binding.applyJobButton.visibility = View.VISIBLE
+                binding.applyJobButton.startAnimation(fromButton)
+
+                binding.requestLoanButton.visibility = View.VISIBLE
+                binding.requestLoanButton.startAnimation(fromButton)
+
+                binding.addButton.startAnimation(openAnim)
+                indyViewModel.openAnimationDone()
+            } else {
+                binding.requestIdentityButton.visibility = View.INVISIBLE
+                binding.requestIdentityButton.startAnimation(toButton)
+
+                binding.requestDegreeButton.visibility = View.INVISIBLE
+                binding.requestDegreeButton.startAnimation(toButton)
+
+                binding.applyJobButton.visibility = View.INVISIBLE
+                binding.applyJobButton.startAnimation(toButton)
+
+                binding.requestLoanButton.visibility = View.INVISIBLE
+                binding.requestLoanButton.startAnimation(toButton)
+
+                binding.addButton.startAnimation(closeAnim)
+                indyViewModel.closeAnimationDone()
+            }
+        }
+
 
 
         return binding.root

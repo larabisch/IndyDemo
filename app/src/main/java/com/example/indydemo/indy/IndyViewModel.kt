@@ -19,6 +19,25 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
     val indy = Indy()
 
 
+    private val _addButtonIsClicked = MutableLiveData<Boolean>().apply {
+        value = true
+    }
+    val addButtonIsClicked
+        get() = _addButtonIsClicked
+
+    fun closeAnimationDone() {
+        _addButtonIsClicked.value = true
+    }
+    fun openAnimationDone() {
+        _addButtonIsClicked.value = false
+    }
+
+    init {
+        viewModelScope.launch {
+            deleteAll()
+        }
+    }
+
 
     private val _initialisationDone = MutableLiveData<Boolean>()
     val initialisationDone
