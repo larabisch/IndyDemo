@@ -22,14 +22,6 @@ fun TextView.setIssuerFormatted(item: Credential?) {
     }
 }
 
-@SuppressLint("SetTextI18n")
-@BindingAdapter("attributesFormatted")
-fun TextView.setAttributesFormatted(item: Credential?) {
-    item?.let {
-        text = "Attributes: ${item.attributes}"
-    }
-}
-
 @BindingAdapter("documentImage")
 fun ImageView.setDocumentImage(item: Credential?) {
     setImageResource(when (item?.document) {

@@ -1,0 +1,63 @@
+package com.example.indydemo.database
+
+object IdentityCredential {
+    const val document = "Passport"
+    const val issuer = "Government"
+
+    const val attribute1_name = "Family name"
+    const val attribute1_value = "Garcia"
+
+    const val attribute2_name = "Given name"
+    const val attribute2_value = "Alice"
+
+    const val attribute3_name = "Date of birth"
+    const val attribute3_value = "12.08.1964"
+
+    const val attribute4_name = "Address"
+    const val attribute4_value = "Sample street 12, 12059 Berlin"
+
+    const val attribute5_name = "Nationality"
+    const val attribute5_value = "German"
+}
+
+
+object DegreeCredential {
+    const val document = "Bachelor-Certificate"
+    const val issuer = "University"
+
+    const val attribute1_name = "Family name"
+    const val attribute1_value = "Garcia"
+
+    const val attribute2_name = "Degree"
+    const val attribute2_value = "Bachelor of Science, Marketing"
+
+    const val attribute3_name = "Status"
+    const val attribute3_value = "Graduated"
+
+    const val attribute4_name = "Year"
+    const val attribute4_value = "2020"
+
+    const val attribute5_name = "Average"
+    const val attribute5_value = "5"
+}
+
+
+object JobCredential {
+    const val document = "Job-Certificate"
+    const val issuer = "Company"
+
+    const val attribute1_name = "Given name"
+    const val attribute1_value = "Alice"
+
+    const val attribute2_name = "Family name"
+    const val attribute2_value = "Garcia"
+
+    const val attribute3_name = "Employee status"
+    const val attribute3_value = "Permanent"
+
+    const val attribute4_name = "Salary"
+    const val attribute4_value = "2400"
+
+    const val attribute5_name = "Experience"
+    const val attribute5_value = "10"
+}

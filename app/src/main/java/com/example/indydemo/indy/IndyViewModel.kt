@@ -2,13 +2,13 @@ package com.example.indydemo.indy
 
 import android.app.Application
 import android.content.Context
+import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.indydemo.database.CredentialDao
+import com.example.indydemo.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.example.indydemo.database.Credential
 
 
 class IndyViewModel (val database: CredentialDao, context: Context, application: Application) : AndroidViewModel(application)  {
@@ -71,7 +71,7 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
         _proofRequestLoanDone.value = false
     }
 
-
+/*
     fun initialise() {
         viewModelScope.launch {
             setVariables()
@@ -85,7 +85,13 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
     fun identityCertificate() {
         viewModelScope.launch {
             getIdentityCertificate()
-            insert(Credential(null, "Passport", "Government", 7))
+            insert(Credential(null, IdentityCredential.document, IdentityCredential.issuer,
+                        IdentityCredential.attribute1_name, IdentityCredential.attribute1_value,
+                        IdentityCredential.attribute2_name, IdentityCredential.attribute2_value,
+                        IdentityCredential.attribute3_name, IdentityCredential.attribute3_value,
+                        IdentityCredential.attribute4_name, IdentityCredential.attribute4_value,
+                        IdentityCredential.attribute5_name, IdentityCredential.attribute5_value,
+             ))
             identificationSuccess()
         }
     }
@@ -100,7 +106,13 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
     fun degreeCertificate() {
         viewModelScope.launch {
             getDegreeCertificate()
-            insert(Credential(null, "Master-Certificate", "University", 5))
+            insert(Credential(null, DegreeCredential.document, DegreeCredential.issuer,
+                        DegreeCredential.attribute1_name, DegreeCredential.attribute1_value,
+                        DegreeCredential.attribute2_name, DegreeCredential.attribute2_value,
+                        DegreeCredential.attribute3_name, DegreeCredential.attribute3_value,
+                        DegreeCredential.attribute4_name, DegreeCredential.attribute4_value,
+                        DegreeCredential.attribute5_name, DegreeCredential.attribute5_value,
+            ))
             degreeCredentialSuccess()
         }
     }
@@ -115,7 +127,13 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
     fun jobCertificate() {
         viewModelScope.launch {
             getJobCertificate()
-            insert(Credential(null, "Job-Certificate", "Company", 9))
+            insert(Credential(null, JobCredential.document, JobCredential.issuer,
+                        JobCredential.attribute1_name, JobCredential.attribute1_value,
+                        JobCredential.attribute2_name, JobCredential.attribute2_value,
+                        JobCredential.attribute3_name, JobCredential.attribute3_value,
+                        JobCredential.attribute4_name, JobCredential.attribute4_value,
+                        JobCredential.attribute5_name, JobCredential.attribute5_value,
+            ))
             jobCredentialSuccess()
         }
     }
@@ -125,14 +143,100 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
             requestLoan()
             proofRequestLoanSuccess()
         }
+    }*/
+
+
+
+
+    fun initialise() {
+        val handler = Handler()
+        handler.postDelayed({
+            viewModelScope.launch {
+                setVariables()
+                deleteAll()
+                initialisationSuccess()
+            }
+        }, 3000)
+    }
+
+    fun identityCertificate() {
+        val handler = Handler()
+        handler.postDelayed({
+            viewModelScope.launch {
+                insert(Credential(null, IdentityCredential.document, IdentityCredential.issuer,
+                        IdentityCredential.attribute1_name, IdentityCredential.attribute1_value,
+                        IdentityCredential.attribute2_name, IdentityCredential.attribute2_value,
+                        IdentityCredential.attribute3_name, IdentityCredential.attribute3_value,
+                        IdentityCredential.attribute4_name, IdentityCredential.attribute4_value,
+                        IdentityCredential.attribute5_name, IdentityCredential.attribute5_value,
+                ))
+                identificationSuccess()
+            }
+        }, 3000)
+    }
+
+    fun degreeRequest() {
+        val handler = Handler()
+        handler.postDelayed({
+            viewModelScope.launch {
+                proofRequestDegreeDone()
+            }
+        }, 3000)
+    }
+
+    fun degreeCertificate() {
+        val handler = Handler()
+        handler.postDelayed({
+            viewModelScope.launch {
+                insert(Credential(null, DegreeCredential.document, DegreeCredential.issuer,
+                        DegreeCredential.attribute1_name, DegreeCredential.attribute1_value,
+                        DegreeCredential.attribute2_name, DegreeCredential.attribute2_value,
+                        DegreeCredential.attribute3_name, DegreeCredential.attribute3_value,
+                        DegreeCredential.attribute4_name, DegreeCredential.attribute4_value,
+                        DegreeCredential.attribute5_name, DegreeCredential.attribute5_value,
+                ))
+                degreeCredentialSuccess()
+            }
+        }, 3000)
+    }
+
+    fun jobRequest() {
+        val handler = Handler()
+        handler.postDelayed({
+            viewModelScope.launch {
+                proofRequestJobSuccess()
+            }
+        }, 3000)
+    }
+
+    fun jobCertificate() {
+        val handler = Handler()
+        handler.postDelayed({
+            viewModelScope.launch {
+                insert(Credential(null, JobCredential.document, JobCredential.issuer,
+                        JobCredential.attribute1_name, JobCredential.attribute1_value,
+                        JobCredential.attribute2_name, JobCredential.attribute2_value,
+                        JobCredential.attribute3_name, JobCredential.attribute3_value,
+                        JobCredential.attribute4_name, JobCredential.attribute4_value,
+                        JobCredential.attribute5_name, JobCredential.attribute5_value,
+                ))
+                jobCredentialSuccess()
+            }
+        }, 3000)
+    }
+
+    fun loanRequest() {
+        val handler = Handler()
+        handler.postDelayed({
+            viewModelScope.launch {
+                proofRequestLoanSuccess()
+            }
+        }, 3000)
     }
 
 
-    private fun doAll() {
-        viewModelScope.launch {
-            all()
-        }
-    }
+
+    private fun doAll() { viewModelScope.launch { all() } }
 
     private suspend fun all() {
         withContext(Dispatchers.Default) {
@@ -153,6 +257,7 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
             indy.proofRequestApplicationLoan()
         }
     }
+
 
 
     private suspend fun initialiseDemo() {

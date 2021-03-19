@@ -21,12 +21,6 @@ interface CredentialDao {
     @Query("DELETE FROM credential_table")
     suspend fun deleteAll()
 
-    @Query("DELETE FROM credential_table WHERE credentialId = :key")
-    suspend fun deleteCredential(key: Int)
-
-    @Query("DELETE FROM credential_table WHERE document = :key")
-    suspend fun deleteCredential(key: String)
-
     @Query("SELECT * FROM credential_table ORDER BY credentialId DESC")
     fun getAllCredentials(): LiveData<List<Credential>>
 

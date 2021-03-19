@@ -76,8 +76,8 @@ class IndyFragment : Fragment() {
         binding.requestDegreeButton.setOnClickListener {
             if (indyViewModel.proofRequestDegreeDone.value == true) {
                 val builder = MaterialAlertDialogBuilder(requireContext())
-                builder.setTitle("You already created a Proof-Request for Degree-Credential!")
-                builder.setMessage("Do you want to request your Degree-Credential?")
+                builder.setTitle("Request your Degree-Credential?")
+                builder.setMessage("You already created a Proof-Request for Degree-Credential!")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.degreeCertificate()
@@ -86,8 +86,8 @@ class IndyFragment : Fragment() {
                 builder.show()
             } else {
                 val builder = MaterialAlertDialogBuilder(requireContext())
-                builder.setTitle("Create a Proof-Request for Degree-Credential?")
-                builder.setMessage("")
+                builder.setTitle("Create Proof-Request for Degree-Credential?")
+                builder.setMessage("After this you can request your Degree-Credential!")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.degreeRequest()
@@ -102,8 +102,8 @@ class IndyFragment : Fragment() {
                 loadingDialog.dismissDialog()
 
                 val builder = MaterialAlertDialogBuilder(requireContext())
-                builder.setTitle("Do you want to request your Degree-Credential?")
-                builder.setMessage("")
+                builder.setTitle("Request your Degree-Credential?")
+                builder.setMessage("After this the Degree-Credential will be added to your Wallet!")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.degreeCertificate()
@@ -123,8 +123,8 @@ class IndyFragment : Fragment() {
         binding.applyJobButton.setOnClickListener {
             if (indyViewModel.proofRequestJobDone.value == true) {
                 val builder = MaterialAlertDialogBuilder(requireContext())
-                builder.setTitle("You already created a Proof-Request for Job-Credential!")
-                builder.setMessage("Do you want to request your Job-Credential?")
+                builder.setTitle("Request your Job-Credential?")
+                builder.setMessage("You already created a Proof-Request for Job-Credential!")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.jobCertificate()
@@ -133,8 +133,8 @@ class IndyFragment : Fragment() {
                 builder.show()
             } else {
                 val builder = MaterialAlertDialogBuilder(requireContext())
-                builder.setTitle("Create a Proof-Request for Job-Application?")
-                builder.setMessage("")
+                builder.setTitle("Create Proof-Request for Job-Application?")
+                builder.setMessage("After this you can request your Job-Credential!")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.jobRequest()
@@ -149,8 +149,8 @@ class IndyFragment : Fragment() {
                 loadingDialog.dismissDialog()
 
                 val builder = MaterialAlertDialogBuilder(requireContext())
-                builder.setTitle("Do you want to request your Job-Credential?")
-                builder.setMessage("")
+                builder.setTitle("Request your Job-Credential?")
+                builder.setMessage("After this the Job-Credential will be added to your Wallet!")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.jobCertificate()
@@ -169,8 +169,8 @@ class IndyFragment : Fragment() {
 
         binding.requestLoanButton.setOnClickListener {
             val builder = MaterialAlertDialogBuilder(requireContext())
-            builder.setTitle("Create a Proof-Request for Loan-Application?")
-            builder.setMessage("")
+            builder.setTitle("Create Proof-Request for Loan-Application?")
+            builder.setMessage("With this you can apply for Loan.")
             builder.setPositiveButton("Yes") { _, _ ->
                 loadingDialog.startLoadingDialog()
                 indyViewModel.loanRequest()

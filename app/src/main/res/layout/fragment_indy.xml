@@ -82,13 +82,13 @@
             android:id="@+id/requestLoanButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Request a Loan"
+            android:enabled="@{indyViewModel.jobCredentialDone}"
+            android:text="Apply for a Loan"
             android:textSize="12sp"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/applyJobButton"
             app:layout_constraintEnd_toEndOf="@+id/applyJobButton"
-            tools:visibility="visible"
-            android:enabled="@{indyViewModel.jobCredentialDone}"  />
+            tools:visibility="visible" />
 
         <Button
             android:id="@+id/initializeDemoButton"

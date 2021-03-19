@@ -47,15 +47,20 @@ class CredentialDatabaseTest {
         // Arrange
         val document = "Passport"
         val issuer = "Department of State"
-        val attributes = 5
-        val credential = Credential(null, document, issuer, attributes)
+        val credential = Credential(
+                null, document, issuer,
+                "", "",
+                "", "",
+                "", "",
+                "", "",
+                "", "",
+        )
         // Act
         credentialDao.insert(credential)
         val databaseCredential = credentialDao.getCredential()
         // Assert
         assertEquals(databaseCredential?.document, document)
         assertEquals(databaseCredential?.issuer, issuer)
-        assertEquals(databaseCredential?.attributes, attributes)
     }
 
     @Test
@@ -65,7 +70,13 @@ class CredentialDatabaseTest {
         val document = "Passport"
         val issuer = "Department of State"
         val attributes = 5
-        val credential = Credential(null, document, issuer, attributes)
+        val credential = Credential(null, document, issuer,
+                "", "",
+                "", "",
+                "", "",
+                "", "",
+                "", "",
+        )
         // Act
         credentialDao.insert(credential)
         val databaseCredential = credentialDao.get(1)
@@ -73,23 +84,6 @@ class CredentialDatabaseTest {
         assertEquals(databaseCredential?.credentialId, 1)
         assertEquals(databaseCredential?.document, document)
         assertEquals(databaseCredential?.issuer, issuer)
-        assertEquals(databaseCredential?.attributes, attributes)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun insertAndDelete() = runBlocking {
-        // Arrange
-        val document = "Passport"
-        val issuer = "Department of State"
-        val attributes = 5
-        val credential = Credential(null, document, issuer, attributes)
-        // Act
-        credentialDao.insert(credential)
-        credentialDao.deleteCredential(1)
-        val allCredential = credentialDao.getAllCredentials()
-        // Assert
-
     }
 
 }

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.indydemo.database.Credential
-import com.example.indydemo.databinding.ListItemCredentialBinding
+import com.example.indydemo.databinding.ItemCredentialBinding
 
 
 class WalletAdapter():
@@ -21,7 +21,7 @@ class WalletAdapter():
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(private val binding: ListItemCredentialBinding):
+    class ViewHolder private constructor(private val binding: ItemCredentialBinding):
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Credential) {
@@ -32,7 +32,7 @@ class WalletAdapter():
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ListItemCredentialBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemCredentialBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
