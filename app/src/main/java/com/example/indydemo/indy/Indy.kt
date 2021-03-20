@@ -155,18 +155,11 @@ class Indy {
         val identityCertificateSchemaVersion = "1.0"
         val identityCertificateSchemaAttributes = JSONArray()
             .put("family_name")
-            //.put("birth_name")
             .put("given_names")
-            //.put("doctoral_degree")
             .put("date_of_birth")
-            .put("place_of_birth")
             .put("address")
             .put("nationality")
             .put("document_type")
-            .put("valid_until")
-            .put("issuing_country")
-            //.put("artistic_name")
-            //.put("pseudonym")
             .toString()
 
         val identityCertificateSchemaResult = Anoncreds.issuerCreateSchema(
@@ -237,6 +230,7 @@ class Indy {
         val bachelorCertificateSchemaAttributes = JSONArray()
             .put("given_names")
             .put("family_name")
+            .put("specialization")
             .put("degree")
             .put("status")
             .put("year")
@@ -381,15 +375,9 @@ class Indy {
             .put("requested_attributes", JSONObject()
                 .put("attr1_referent", JSONObject().put("name", "given_names"))
                 .put("attr2_referent", JSONObject().put("name", "family_name"))
-                .put("attr3_referent", JSONObject().put("name", "date_of_birth"))
-                .put("attr4_referent", JSONObject().put("name", "place_of_birth"))
-            )
-            .put("requested_predicates", JSONObject()
-                .put("predicate1_referent", JSONObject()
-                    .put("name", "valid_until")
-                    .put("p_type", ">=")
-                    .put("p_value", 20210211)
-                )
+                .put("attr3_referent", JSONObject().put("name", "address"))
+                .put("attr4_referent", JSONObject().put("name", "date_of_birth"))
+                .put("attr5_referent", JSONObject().put("name", "nationality"))
             )
             .toString()
 
@@ -416,14 +404,12 @@ class Indy {
                 .put("attr2_referent", JSONObject().put("name", "family_name"))
                 .put("attr3_referent", JSONObject().put("name", "degree"))
                 .put("attr4_referent", JSONObject().put("name", "status"))
-                .put("attr5_referent", JSONObject().put("name", "phone_number"))
-
             )
             .put("requested_predicates", JSONObject()
                 .put("predicate1_referent", JSONObject()
                     .put("name", "average")
-                    .put("p_type", ">=")
-                    .put("p_value", 4)
+                    .put("p_type", "<=")
+                    .put("p_value", 30)
                 )
             )
             .toString()
@@ -448,7 +434,6 @@ class Indy {
             .put("version", "0.1")
             .put("requested_attributes", JSONObject()
                 .put("attr1_referent", JSONObject().put("name", "employee_status"))
-
             )
             .put("requested_predicates", JSONObject()
                 .put("predicate1_referent", JSONObject()
@@ -456,6 +441,11 @@ class Indy {
                     .put("p_type", ">=")
                     .put("p_value", 2000)
                 )
+/*                .put("predicate2_referent", JSONObject()
+                    .put("name", "date_of_birth")
+                    .put("p_type", "<=")
+                    .put("p_value", 20030320)
+                )*/
             )
             .toString()
 
@@ -501,17 +491,12 @@ class Indy {
             .put("family_name", JSONObject()
                     .put("raw", "Garcia")
                     .put("encoded", "946510486021438157324488086511345775493242887916"))
-            //.put("birth_name", JSONObject().put("raw", "").put("encoded", ""))
             .put("given_names", JSONObject()
                     .put("raw", "Alice")
                     .put("encoded", "303680606261854555853193981910306662446219611633"))
-            //.put("doctoral_degree", JSONObject().put("raw", "").put("encoded", ""))
             .put("date_of_birth", JSONObject()
-                    .put("raw", "1964-08-12")
-                    .put("encoded", "19640812"))
-            .put("place_of_birth", JSONObject()
-                    .put("raw", "Berlin")
-                    .put("encoded", "35213462824075338563596693498506032610897976097"))
+                    .put("raw", "19810812")
+                    .put("encoded", "19810812"))
             .put("address", JSONObject()
                     .put("raw", "Sample street 12, 12059 Berlin")
                     .put("encoded", "947397614802691795330029495488188401319414724640"))
@@ -521,14 +506,6 @@ class Indy {
             .put("document_type", JSONObject()
                     .put("raw", "Identity card")
                     .put("encoded", "144992736518735056036859271803104200336197691206"))
-            .put("valid_until", JSONObject()
-                    .put("raw", "20291031")
-                    .put("encoded", "20291031"))
-            .put("issuing_country", JSONObject()
-                    .put("raw", "Germany")
-                    .put("encoded", "136062252323357910523596751724311663715246877932"))
-            //.put("artistic_name", JSONObject().put("raw", "").put("encoded", ""))
-            //.put("pseudonym", JSONObject().put("raw", "").put("encoded", ""))
             .toString()
 
         val identityCertificateCreateCredentialResult = Anoncreds.issuerCreateCredential(
@@ -608,6 +585,7 @@ class Indy {
 
         Log.d(TAG, "Indy: Search for Attribute 3: $degreeRequestCredentialsForAttribute3")
 
+
         val degreeRequestCredentialsForAttribute4 = JSONArray(degreeRequestCredentialsSearch
                 .fetchNextCredentials("attr4_referent", 100).get())
         val degreeRequestCredentialIdForAttribute4 = degreeRequestCredentialsForAttribute4
@@ -615,15 +593,16 @@ class Indy {
 
         Log.d(TAG, "Indy: Search for Attribute 4: $degreeRequestCredentialsForAttribute4")
 
+
+        val degreeRequestCredentialsForAttribute5 = JSONArray(degreeRequestCredentialsSearch
+                .fetchNextCredentials("attr5_referent", 100).get())
+        val degreeRequestCredentialIdForAttribute5 = degreeRequestCredentialsForAttribute5
+                .getJSONObject(0).getJSONObject("cred_info").getString("referent")
+
+        Log.d(TAG, "Indy: Search for Attribute 5: $degreeRequestCredentialsForAttribute5")
+
         Log.d(TAG, "Indy: I searched for all attributes for Proof-Request for Degree-Certificate")
 
-        val degreeRequestCredentialsForPredicate = JSONArray(degreeRequestCredentialsSearch
-                .fetchNextCredentials("predicate1_referent", 100).get())
-        val degreeRequestCredentialIdForPredicate = degreeRequestCredentialsForPredicate
-                .getJSONObject(0).getJSONObject("cred_info").getString("referent")
-        Log.d(TAG, "Indy: Search for Predicate: $degreeRequestCredentialIdForPredicate")
-
-        Log.d(TAG, "Indy: Prover searched for all Predicates of Proof-Request for Degree-Certificate")
 
         degreeRequestCredentialsSearch.close()
         Log.d(TAG, "Indy: I searched for all requested Credentials of Proof-Request for Degree-Certificate")
@@ -646,15 +625,15 @@ class Indy {
                     .put("revealed", true)
                 )
                 .put("attr4_referent", JSONObject()
-                    .put("cred_id", degreeRequestCredentialIdForAttribute4)
-                    .put("revealed", true)
+                        .put("cred_id", degreeRequestCredentialIdForAttribute4)
+                        .put("revealed", true)
+                )
+                .put("attr5_referent", JSONObject()
+                        .put("cred_id", degreeRequestCredentialIdForAttribute5)
+                        .put("revealed", true)
                 )
             )
-            .put("requested_predicates", JSONObject()
-                .put("predicate1_referent", JSONObject()
-                    .put("cred_id", degreeRequestCredentialIdForPredicate)
-                )
-            )
+            .put("requested_predicates", JSONObject() )
             .toString()
 
         Log.d(TAG, "Indy: JSON for Proof-Request for Degree-Certificate finished")
@@ -710,6 +689,12 @@ class Indy {
 
         Log.d(TAG, "Indy: Revealed attribute 4: $revealedAttr4")
         Log.d(TAG, "Indy: Revealed attribute 4: " + revealedAttr4.getString("raw"))
+
+        val revealedAttr5 = degreeRequestProof.getJSONObject("requested_proof")
+                .getJSONObject("revealed_attrs").getJSONObject("attr5_referent")
+
+        Log.d(TAG, "Indy: Revealed attribute 5: $revealedAttr5")
+        Log.d(TAG, "Indy: Revealed attribute 5: " + revealedAttr5.getString("raw"))
 
 
         val revocRegDefs = JSONObject().toString()
@@ -775,8 +760,11 @@ class Indy {
             .put("family_name", JSONObject()
                     .put("raw", "Garcia")
                     .put("encoded", "5321642780241790123587902456789123452"))
+            .put("specialization", JSONObject()
+                    .put("raw", "Computer science")
+                    .put("encoded", "12434523576212321"))
             .put("degree", JSONObject()
-                    .put("raw", "Bachelor of Science, Marketing")
+                    .put("raw", "Bachelor of Science")
                     .put("encoded", "12434523576212321"))
             .put("status", JSONObject()
                     .put("raw", "graduated")
@@ -785,8 +773,8 @@ class Indy {
                     .put("raw", "2020")
                     .put("encoded", "2020"))
             .put("average", JSONObject()
-                    .put("raw", "5")
-                    .put("encoded", "5"))
+                    .put("raw", "17")
+                    .put("encoded", "17"))
             .toString()
 
         val bachelorCertificateCreateCredentialResult = Anoncreds.issuerCreateCredential(
@@ -876,12 +864,6 @@ class Indy {
 
         Log.d(TAG, "Indy: Search for Attribute 4: $jobApplicationCredentialsForAttribute4")
 
-
-        val jobApplicationCredentialsForAttribute5 = JSONArray(jobApplicationCredentialsSearch
-                .fetchNextCredentials("attr5_referent", 100).get())
-
-        Log.d(TAG, "Indy: Search for Attribute 5: $jobApplicationCredentialsForAttribute5")
-
         Log.d(TAG, "Indy: Prover searched for all attributes of Proof-Request for Job-Application")
 
 
@@ -900,11 +882,8 @@ class Indy {
 
 
         // 4. I Create Proof
-        val jobApplicationSelfAttestedValue = "01234567890"
         val jobApplicationRequestedCredentialsJson = JSONObject()
-            .put("self_attested_attributes", JSONObject()
-                    .put("attr5_referent", jobApplicationSelfAttestedValue)
-            )
+            .put("self_attested_attributes", JSONObject() )
             .put("requested_attributes", JSONObject()
                 .put("attr1_referent", JSONObject()
                     .put("cred_id", jobApplicationCredentialIdForAttribute1)
@@ -971,10 +950,6 @@ class Indy {
                 .getJSONObject("unrevealed_attrs")
                 .getJSONObject("attr2_referent")
                 .getInt("sub_proof_index"))
-        Log.d(TAG, "Indy: selfAttestedValue: $jobApplicationSelfAttestedValue should be: "
-                + jobApplicationProof.getJSONObject("requested_proof")
-                .getJSONObject("self_attested_attrs")
-                .getString("attr5_referent"))
 
 
         val revocRegDefs = JSONObject().toString()
@@ -1114,12 +1089,21 @@ class Indy {
 
         Log.d(TAG, "Indy: Prover searched for all attributes of Proof-Request for Loan-Application")
 
-        val loanApplicationCredentialsForPredicate = JSONArray(loanApplicationCredentialsSearch
+        val loanApplicationCredentialsForPredicate1 = JSONArray(loanApplicationCredentialsSearch
                 .fetchNextCredentials("predicate1_referent", 100).get())
-        val loanApplicationCredentialIdForPredicate = loanApplicationCredentialsForPredicate
+        val loanApplicationCredentialIdForPredicate1 = loanApplicationCredentialsForPredicate1
                 .getJSONObject(0).getJSONObject("cred_info").getString("referent")
 
-        Log.d(TAG, "Indy: Search for Predicate: $loanApplicationCredentialIdForPredicate")
+        Log.d(TAG, "Indy: Search for Predicate: $loanApplicationCredentialIdForPredicate1")
+
+
+/*        val loanApplicationCredentialsForPredicate2 = JSONArray(loanApplicationCredentialsSearch
+                .fetchNextCredentials("predicate2_referent", 100).get())
+        val loanApplicationCredentialIdForPredicate2 = loanApplicationCredentialsForPredicate2
+                .getJSONObject(0).getJSONObject("cred_info").getString("referent")
+
+        Log.d(TAG, "Indy: Search for Predicate: $loanApplicationCredentialIdForPredicate2")*/
+
 
         Log.d(TAG, "Indy: Prover searched for all Predicates of Proof-Request for Loan-Application")
 
@@ -1138,8 +1122,11 @@ class Indy {
             )
             .put("requested_predicates", JSONObject()
                 .put("predicate1_referent", JSONObject()
-                    .put("cred_id", loanApplicationCredentialIdForPredicate)
+                    .put("cred_id", loanApplicationCredentialIdForPredicate1)
                 )
+/*                .put("predicate2_referent", JSONObject()
+                        .put("cred_id", loanApplicationCredentialIdForPredicate2)
+                )*/
             )
             .toString()
 

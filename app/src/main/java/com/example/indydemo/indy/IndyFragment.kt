@@ -66,13 +66,6 @@ class IndyFragment : Fragment() {
             }
         }
 
-
-
-/*        identityViewModel.identificationDone.observe(viewLifecycleOwner, {
-            //indyViewModel.setInitializeButtonVisible()
-        })*/
-
-
         binding.initializeDemoButton.setOnClickListener {
             val builder = MaterialAlertDialogBuilder(requireContext())
             builder.setTitle("Initialize the Demo?")
@@ -191,7 +184,7 @@ class IndyFragment : Fragment() {
                 builder.setTitle("Create Proof-Request for Job-Application?")
                 builder.setMessage("\nThe following Claims will be used:\n\n" +
                         " - Family name \n - Given name \n - Specialization \n - Degree \n " +
-                        "- Status \n - Average / ZKP-Proof that your average is over 4")
+                        "- Status \n - ZKP-Proof that your average is below 3.0")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.jobRequest()

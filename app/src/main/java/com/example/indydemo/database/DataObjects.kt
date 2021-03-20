@@ -19,7 +19,7 @@ object IdentityCredential {
     const val attribute2_value = "Alice"
 
     const val attribute3_name = "Date of birth"
-    const val attribute3_value = "1964-08-12"
+    const val attribute3_value = "1981-08-12"
 
     const val attribute4_name = "Address"
     const val attribute4_value = "Sample street 12, 12059 Berlin"
@@ -46,7 +46,7 @@ object DegreeCredential {
     const val attribute4_value = "2020"
 
     const val attribute5_name = "Average"
-    const val attribute5_value = "5"
+    const val attribute5_value = "1.7"
 }
 
 
