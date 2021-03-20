@@ -26,33 +26,44 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/initializeDemoButton"
+            app:layout_constraintBottom_toTopOf="@+id/startIdentification"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:src="@drawable/ic_baseline_add_24"
-            app:layout_constraintBottom_toTopOf="@+id/initializeDemoButton"
+            app:layout_constraintBottom_toTopOf="@+id/startIdentification"
             app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <Button
+            android:id="@+id/initializeDemoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Initialize Demo"
+            android:enabled="@{identityViewModel.initialisationVisible}"
+            android:textSize="12sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/addButton"
+            app:layout_constraintEnd_toEndOf="@+id/addButton"
+            tools:visibility="visible" />
 
         <Button
             android:id="@+id/requestIdentityButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:enabled="@{identityViewModel.identificationVisible}"
             android:text="Request Identity Credential"
+            android:enabled="@{indyViewModel.initialisationDone}"
             android:textSize="12sp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/addButton"
+            app:layout_constraintBottom_toTopOf="@+id/initializeDemoButton"
             app:layout_constraintEnd_toEndOf="@+id/addButton"
             tools:visibility="visible" />
 
@@ -92,16 +103,17 @@
             app:layout_constraintEnd_toEndOf="@+id/applyJobButton"
             tools:visibility="visible" />
 
+
         <Button
-            android:id="@+id/initializeDemoButton"
+            android:id="@+id/startIdentification"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Initialize Demo"
+            android:text="Start Identification"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"  />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

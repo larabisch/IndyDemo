@@ -6,11 +6,12 @@ import androidx.lifecycle.ViewModel
 
 class IdentityViewModel: ViewModel() {
 
-    private val _identificationVisible = MutableLiveData<Boolean>(). apply { value = false }
-    val identificationVisible
-        get() = _identificationVisible
-    fun setIdentityButtonVisible() { _identificationVisible.value = true }
-    fun setIdentityButtonInvisible() { _identificationVisible.value = false }
+    private val _initialisationVisible = MutableLiveData<Boolean>(). apply { value = false }
+    val initialisationVisible
+        get() = _initialisationVisible
+    fun setInitializeButtonVisible() { _initialisationVisible.value = true }
+    fun setInitializeButtonInvisible() { _initialisationVisible.value = false }
+
 
     private val _identificationDone = MutableLiveData<Boolean>(). apply { value = false }
     val identificationDone

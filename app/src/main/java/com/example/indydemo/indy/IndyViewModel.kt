@@ -3,7 +3,6 @@ package com.example.indydemo.indy
 import android.app.Application
 import android.content.Context
 import android.os.Handler
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.indydemo.database.*
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +29,8 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
         get() = _addButtonIsClicked
     fun closeAnimationDone() { _addButtonIsClicked.value = true }
     fun openAnimationDone() { _addButtonIsClicked.value = false }
+
+
 
     private val _initialisationDone = MutableLiveData<Boolean>()
     val initialisationDone
@@ -80,8 +81,8 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
         _jobCredentialDone.value = false
         _proofRequestLoanDone.value = false
     }
-
 /*
+
     fun initialise() {
         viewModelScope.launch {
             setVariables()
@@ -153,7 +154,8 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
             requestLoan()
             proofRequestLoanSuccess()
         }
-    }*/
+    }
+*/
 
 
 
@@ -246,6 +248,7 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
 
 
 
+/*
     private fun doAll() { viewModelScope.launch { all() } }
 
     private suspend fun all() {
@@ -266,7 +269,7 @@ class IndyViewModel (val database: CredentialDao, context: Context, application:
             indy.requestJobCertificate()
             indy.proofRequestApplicationLoan()
         }
-    }
+    }*/
 
 
 
