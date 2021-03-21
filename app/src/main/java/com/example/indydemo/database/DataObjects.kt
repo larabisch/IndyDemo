@@ -9,7 +9,7 @@ object ServiceProvider {
 }
 
 object IdentityCredential {
-    const val document = "Passport"
+    const val document = "Identity Card"
     const val issuer = "Government"
 
     const val attribute1_name = "Family name"

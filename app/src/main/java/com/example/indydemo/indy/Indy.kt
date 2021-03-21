@@ -50,7 +50,6 @@ class Indy {
 
     private lateinit var jobApplicationProofRequestJson : String
     private lateinit var degreeRequestProofRequestJson : String
-    private lateinit var loanApplicationProofRequestJson : String
 
     private lateinit var identityCertificateSchemaId : String
     private lateinit var identityCertificateSchemaJson : String
@@ -356,7 +355,6 @@ class Indy {
 
         Log.d(TAG, "Indy: CREATE JOB CREDENTIAL OFFER DONE")
 
-
     }
 
 
@@ -369,17 +367,23 @@ class Indy {
         val degreeRequestNonce = Anoncreds.generateNonce().get()
 
         degreeRequestProofRequestJson = JSONObject()
-            .put("nonce", degreeRequestNonce)
-            .put("name", "Degree-Request")
-            .put("version", "0.1")
-            .put("requested_attributes", JSONObject()
-                .put("attr1_referent", JSONObject().put("name", "given_names"))
-                .put("attr2_referent", JSONObject().put("name", "family_name"))
-                .put("attr3_referent", JSONObject().put("name", "address"))
-                .put("attr4_referent", JSONObject().put("name", "date_of_birth"))
-                .put("attr5_referent", JSONObject().put("name", "nationality"))
-            )
-            .toString()
+                .put("nonce", degreeRequestNonce)
+                .put("name", "Degree-Request")
+                .put("version", "0.1")
+                .put("requested_attributes", JSONObject()
+                        .put("attr1_referent", JSONObject().put("name", "given_names"))
+                        .put("attr2_referent", JSONObject().put("name", "family_name"))
+                        .put("attr3_referent", JSONObject().put("name", "address"))
+                        .put("attr4_referent", JSONObject().put("name", "nationality"))
+                )
+                .put("requested_predicates", JSONObject()
+                        .put("predicate1_referent", JSONObject()
+                                .put("name", "date_of_birth")
+                                .put("p_type", "<=")
+                                .put("p_value", 20030320)
+                        )
+                )
+                .toString()
 
         Log.d(TAG, "Indy: JSON Creation for Proof-Request for Degree-Certificate")
 
@@ -400,17 +404,18 @@ class Indy {
             .put("name", "Job-Application")
             .put("version", "0.1")
             .put("requested_attributes", JSONObject()
-                .put("attr1_referent", JSONObject().put("name", "given_names"))
-                .put("attr2_referent", JSONObject().put("name", "family_name"))
-                .put("attr3_referent", JSONObject().put("name", "degree"))
-                .put("attr4_referent", JSONObject().put("name", "status"))
+                    .put("attr1_referent", JSONObject().put("name", "given_names"))
+                    .put("attr2_referent", JSONObject().put("name", "family_name"))
+                    .put("attr3_referent", JSONObject().put("name", "specialization"))
+                    .put("attr4_referent", JSONObject().put("name", "degree"))
+                    .put("attr5_referent", JSONObject().put("name", "status"))
             )
             .put("requested_predicates", JSONObject()
-                .put("predicate1_referent", JSONObject()
-                    .put("name", "average")
-                    .put("p_type", "<=")
-                    .put("p_value", 30)
-                )
+                    .put("predicate1_referent", JSONObject()
+                            .put("name", "average")
+                            .put("p_type", "<=")
+                            .put("p_value", 30)
+                    )
             )
             .toString()
 
@@ -419,44 +424,6 @@ class Indy {
         Log.d(TAG, "Indy: CREATE PROOF-REQUEST JOB-APPLICATION DONE")
 
     }
-
-    fun createProofRequestLoanApplication () {
-
-        Log.d(TAG, "Indy: CREATE PROOF-REQUEST LOAN-APPLICATION STARTED")
-
-
-        // 2. I Get Credentials for Proof Request
-        val loanApplicationNonce = Anoncreds.generateNonce().get()
-
-        loanApplicationProofRequestJson = JSONObject()
-            .put("nonce", loanApplicationNonce)
-            .put("name", "Job-Application")
-            .put("version", "0.1")
-            .put("requested_attributes", JSONObject()
-                .put("attr1_referent", JSONObject().put("name", "employee_status"))
-            )
-            .put("requested_predicates", JSONObject()
-                .put("predicate1_referent", JSONObject()
-                    .put("name", "salary")
-                    .put("p_type", ">=")
-                    .put("p_value", 2000)
-                )
-/*                .put("predicate2_referent", JSONObject()
-                    .put("name", "date_of_birth")
-                    .put("p_type", "<=")
-                    .put("p_value", 20030320)
-                )*/
-            )
-            .toString()
-
-        Log.d(TAG, "Indy: JSON Creation for Proof-Request for Loan-Application")
-
-
-        Log.d(TAG, "Indy: CREATE PROOF-REQUEST LOAN-APPLICATION DONE")
-
-    }
-
-
 
 
 
@@ -542,7 +509,6 @@ class Indy {
         myWallet.closeWallet().get()
         Log.d(TAG, "Indy: My Wallet was closed")
 
-
         Log.d(TAG, "Indy: REQUEST IDENTITY CERTIFICATE DONE")
 
     }
@@ -594,12 +560,12 @@ class Indy {
         Log.d(TAG, "Indy: Search for Attribute 4: $degreeRequestCredentialsForAttribute4")
 
 
-        val degreeRequestCredentialsForAttribute5 = JSONArray(degreeRequestCredentialsSearch
-                .fetchNextCredentials("attr5_referent", 100).get())
-        val degreeRequestCredentialIdForAttribute5 = degreeRequestCredentialsForAttribute5
+        val degreeRequestCredentialsForPredicate = JSONArray(degreeRequestCredentialsSearch
+                .fetchNextCredentials("predicate1_referent", 100).get())
+        val degreeRequestCredentialIdForPredicate = degreeRequestCredentialsForPredicate
                 .getJSONObject(0).getJSONObject("cred_info").getString("referent")
 
-        Log.d(TAG, "Indy: Search for Attribute 5: $degreeRequestCredentialsForAttribute5")
+        Log.d(TAG, "Indy: Search for Predicate: $degreeRequestCredentialIdForPredicate")
 
         Log.d(TAG, "Indy: I searched for all attributes for Proof-Request for Degree-Certificate")
 
@@ -610,31 +576,31 @@ class Indy {
 
         // 4. I create Proof
         val degreeRequestedCredentialsJson = JSONObject()
-            .put("self_attested_attributes", JSONObject())
-            .put("requested_attributes", JSONObject()
-                .put("attr1_referent", JSONObject()
-                    .put("cred_id", degreeRequestCredentialIdForAttribute1)
-                    .put("revealed", true)
+                .put("self_attested_attributes", JSONObject())
+                .put("requested_attributes", JSONObject()
+                        .put("attr1_referent", JSONObject()
+                                .put("cred_id", degreeRequestCredentialIdForAttribute1)
+                                .put("revealed", true)
+                        )
+                        .put("attr2_referent", JSONObject()
+                                .put("cred_id", degreeRequestCredentialIdForAttribute2)
+                                .put("revealed", true)
+                        )
+                        .put("attr3_referent", JSONObject()
+                                .put("cred_id", degreeRequestCredentialIdForAttribute3)
+                                .put("revealed", true)
+                        )
+                        .put("attr4_referent", JSONObject()
+                                .put("cred_id", degreeRequestCredentialIdForAttribute4)
+                                .put("revealed", true)
+                        )
                 )
-                .put("attr2_referent", JSONObject()
-                    .put("cred_id", degreeRequestCredentialIdForAttribute2)
-                    .put("revealed", true)
+                .put("requested_predicates", JSONObject()
+                        .put("predicate1_referent", JSONObject()
+                                .put("cred_id", degreeRequestCredentialIdForPredicate)
+                        )
                 )
-                .put("attr3_referent", JSONObject()
-                    .put("cred_id", degreeRequestCredentialIdForAttribute3)
-                    .put("revealed", true)
-                )
-                .put("attr4_referent", JSONObject()
-                        .put("cred_id", degreeRequestCredentialIdForAttribute4)
-                        .put("revealed", true)
-                )
-                .put("attr5_referent", JSONObject()
-                        .put("cred_id", degreeRequestCredentialIdForAttribute5)
-                        .put("revealed", true)
-                )
-            )
-            .put("requested_predicates", JSONObject() )
-            .toString()
+                .toString()
 
         Log.d(TAG, "Indy: JSON for Proof-Request for Degree-Certificate finished")
 
@@ -668,33 +634,8 @@ class Indy {
         // 5. Verifier verifies Proof
         val revealedAttr1 = degreeRequestProof.getJSONObject("requested_proof")
                 .getJSONObject("revealed_attrs").getJSONObject("attr1_referent")
-
         Log.d(TAG, "Indy: Revealed attribute 1: $revealedAttr1")
         Log.d(TAG, "Indy: Revealed attribute 1: " + revealedAttr1.getString("raw"))
-
-        val revealedAttr2 = degreeRequestProof.getJSONObject("requested_proof")
-                .getJSONObject("revealed_attrs").getJSONObject("attr2_referent")
-
-        Log.d(TAG, "Indy: Revealed attribute 2: $revealedAttr2")
-        Log.d(TAG, "Indy: Revealed attribute 2: " + revealedAttr2.getString("raw"))
-
-        val revealedAttr3 = degreeRequestProof.getJSONObject("requested_proof")
-                .getJSONObject("revealed_attrs").getJSONObject("attr3_referent")
-
-        Log.d(TAG, "Indy: Revealed attribute 3: $revealedAttr3")
-        Log.d(TAG, "Indy: Revealed attribute 3: " + revealedAttr3.getString("raw"))
-
-        val revealedAttr4 = degreeRequestProof.getJSONObject("requested_proof")
-                .getJSONObject("revealed_attrs").getJSONObject("attr4_referent")
-
-        Log.d(TAG, "Indy: Revealed attribute 4: $revealedAttr4")
-        Log.d(TAG, "Indy: Revealed attribute 4: " + revealedAttr4.getString("raw"))
-
-        val revealedAttr5 = degreeRequestProof.getJSONObject("requested_proof")
-                .getJSONObject("revealed_attrs").getJSONObject("attr5_referent")
-
-        Log.d(TAG, "Indy: Revealed attribute 5: $revealedAttr5")
-        Log.d(TAG, "Indy: Revealed attribute 5: " + revealedAttr5.getString("raw"))
 
 
         val revocRegDefs = JSONObject().toString()
@@ -864,6 +805,13 @@ class Indy {
 
         Log.d(TAG, "Indy: Search for Attribute 4: $jobApplicationCredentialsForAttribute4")
 
+        val jobApplicationCredentialsForAttribute5 = JSONArray(jobApplicationCredentialsSearch
+                .fetchNextCredentials("attr5_referent", 100).get())
+        val jobApplicationCredentialIdForAttribute5 = jobApplicationCredentialsForAttribute5
+                .getJSONObject(0).getJSONObject("cred_info").getString("referent")
+
+        Log.d(TAG, "Indy: Search for Attribute 5: $jobApplicationCredentialsForAttribute5")
+
         Log.d(TAG, "Indy: Prover searched for all attributes of Proof-Request for Job-Application")
 
 
@@ -885,27 +833,31 @@ class Indy {
         val jobApplicationRequestedCredentialsJson = JSONObject()
             .put("self_attested_attributes", JSONObject() )
             .put("requested_attributes", JSONObject()
-                .put("attr1_referent", JSONObject()
-                    .put("cred_id", jobApplicationCredentialIdForAttribute1)
-                    .put("revealed", true)
-                )
-                .put("attr2_referent", JSONObject()
-                    .put("cred_id", jobApplicationCredentialIdForAttribute2)
-                    .put("revealed", false)
-                )
-                .put("attr3_referent", JSONObject()
-                    .put("cred_id", jobApplicationCredentialIdForAttribute3)
-                    .put("revealed", false)
-                )
-                .put("attr4_referent", JSONObject()
-                    .put("cred_id", jobApplicationCredentialIdForAttribute4)
-                    .put("revealed", false)
-                )
+                    .put("attr1_referent", JSONObject()
+                            .put("cred_id", jobApplicationCredentialIdForAttribute1)
+                            .put("revealed", true)
+                    )
+                    .put("attr2_referent", JSONObject()
+                            .put("cred_id", jobApplicationCredentialIdForAttribute2)
+                            .put("revealed", false)
+                    )
+                    .put("attr3_referent", JSONObject()
+                            .put("cred_id", jobApplicationCredentialIdForAttribute3)
+                            .put("revealed", false)
+                    )
+                    .put("attr4_referent", JSONObject()
+                            .put("cred_id", jobApplicationCredentialIdForAttribute4)
+                            .put("revealed", false)
+                    )
+                    .put("attr5_referent", JSONObject()
+                            .put("cred_id", jobApplicationCredentialIdForAttribute5)
+                            .put("revealed", false)
+                    )
             )
             .put("requested_predicates", JSONObject()
-                .put("predicate1_referent", JSONObject()
-                    .put("cred_id", jobApplicationCredentialIdForPredicate)
-                )
+                    .put("predicate1_referent", JSONObject()
+                            .put("cred_id", jobApplicationCredentialIdForPredicate)
+                    )
             )
             .toString()
 
@@ -945,11 +897,6 @@ class Indy {
 
         Log.d(TAG, "Indy: Revealed attribute 1: $revealedAttr1")
         Log.d(TAG, "Indy: Revealed attribute 1: " + revealedAttr1.getString("raw"))
-        Log.d(TAG, "Indy: (should be not null) " + jobApplicationProof
-                .getJSONObject("requested_proof")
-                .getJSONObject("unrevealed_attrs")
-                .getJSONObject("attr2_referent")
-                .getInt("sub_proof_index"))
 
 
         val revocRegDefs = JSONObject().toString()
@@ -970,7 +917,6 @@ class Indy {
         // 6. Close my wallet
         myWallet.closeWallet().get()
         Log.d(TAG, "Indy: My Wallet Closed")
-
 
         Log.d(TAG, "Indy: PROOF-REQUEST FOR JOB-APPLICATION DONE")
 
@@ -1057,137 +1003,7 @@ class Indy {
         myWallet.closeWallet().get()
         Log.d(TAG, "Indy: My Wallet was closed")
 
-
         Log.d(TAG, "Indy: CREDENTIAL FOR JOB-APPLICATION DONE")
-
-    }
-
-
-
-
-    fun proofRequestApplicationLoan() {
-
-        Log.d(TAG, "Indy: PROOF-REQUEST FOR LOAN-APPLICATION STARTED")
-
-
-        // 1. Open My Wallet
-        val myWallet = Wallet.openWallet(myWalletConfig, myWalletCredentials).get()
-        Log.d(TAG, "Indy: My Wallet was opened")
-
-
-        // 3. I search for all Credentials
-        val loanApplicationCredentialsSearch = CredentialsSearchForProofReq
-                .open(myWallet, loanApplicationProofRequestJson, null).get()
-
-        val loanApplicationCredentialsForAttribute = JSONArray(loanApplicationCredentialsSearch
-                .fetchNextCredentials("attr1_referent", 100).get())
-        val loanApplicationCredentialIdForAttribute = loanApplicationCredentialsForAttribute
-                .getJSONObject(0).getJSONObject("cred_info").getString("referent")
-
-        Log.d(TAG, "Indy: Search for Attribute 1: $loanApplicationCredentialsForAttribute")
-
-
-        Log.d(TAG, "Indy: Prover searched for all attributes of Proof-Request for Loan-Application")
-
-        val loanApplicationCredentialsForPredicate1 = JSONArray(loanApplicationCredentialsSearch
-                .fetchNextCredentials("predicate1_referent", 100).get())
-        val loanApplicationCredentialIdForPredicate1 = loanApplicationCredentialsForPredicate1
-                .getJSONObject(0).getJSONObject("cred_info").getString("referent")
-
-        Log.d(TAG, "Indy: Search for Predicate: $loanApplicationCredentialIdForPredicate1")
-
-
-/*        val loanApplicationCredentialsForPredicate2 = JSONArray(loanApplicationCredentialsSearch
-                .fetchNextCredentials("predicate2_referent", 100).get())
-        val loanApplicationCredentialIdForPredicate2 = loanApplicationCredentialsForPredicate2
-                .getJSONObject(0).getJSONObject("cred_info").getString("referent")
-
-        Log.d(TAG, "Indy: Search for Predicate: $loanApplicationCredentialIdForPredicate2")*/
-
-
-        Log.d(TAG, "Indy: Prover searched for all Predicates of Proof-Request for Loan-Application")
-
-        loanApplicationCredentialsSearch.close()
-        Log.d(TAG, "Indy: I searched for all requested Credentials of Proof-Request for Job-Application")
-
-
-        // 4. I Create Proof
-        val loanApplicationRequestedCredentialsJson = JSONObject()
-            .put("self_attested_attributes", JSONObject())
-            .put("requested_attributes", JSONObject()
-                .put("attr1_referent", JSONObject()
-                    .put("cred_id", loanApplicationCredentialIdForAttribute)
-                    .put("revealed", true)
-                )
-            )
-            .put("requested_predicates", JSONObject()
-                .put("predicate1_referent", JSONObject()
-                    .put("cred_id", loanApplicationCredentialIdForPredicate1)
-                )
-/*                .put("predicate2_referent", JSONObject()
-                        .put("cred_id", loanApplicationCredentialIdForPredicate2)
-                )*/
-            )
-            .toString()
-
-        Log.d(TAG, "Indy: JSON for Proof-Request for Loan-Application finished")
-
-
-        val loanApplicationSchemas: String = JSONObject()
-                .put(jobCertificateSchemaId, JSONObject(jobCertificateSchemaJson)).toString()
-        val loanApplicationCredentialDefs: String = JSONObject()
-                .put(jobCertificateCredDefId, JSONObject(jobCertificateCredDefJson)).toString()
-
-        val loanApplicationRevocStates = JSONObject().toString()
-
-        var loanApplicationProofJson = ""
-        try {
-            loanApplicationProofJson = Anoncreds.proverCreateProof(
-                myWallet,
-                loanApplicationProofRequestJson,
-                loanApplicationRequestedCredentialsJson,
-                myMasterSecretId,
-                loanApplicationSchemas,
-                loanApplicationCredentialDefs,
-                loanApplicationRevocStates
-            ).get()
-        } catch (e: Exception) {
-            Log.d(TAG, e.toString())
-        }
-
-        val loanApplicationProof = JSONObject(loanApplicationProofJson)
-
-        Log.d(TAG, "Indy: Proof Creation of Proof-Request for Loan-Application done")
-
-
-        // 5. Verifier verifies Proof
-        val revealedAttr1 = loanApplicationProof.getJSONObject("requested_proof")
-                .getJSONObject("revealed_attrs").getJSONObject("attr1_referent")
-
-        Log.d(TAG, "Indy: Revealed attribute 1: $revealedAttr1")
-        Log.d(TAG, "Indy: Revealed attribute 1: " + revealedAttr1.getString("raw"))
-
-        val revocRegDefs = JSONObject().toString()
-        val revocRegs = JSONObject().toString()
-
-        val valid = Anoncreds.verifierVerifyProof(
-            loanApplicationProofRequestJson,
-            loanApplicationProofJson,
-            loanApplicationSchemas,
-            loanApplicationCredentialDefs,
-            revocRegDefs,
-            revocRegs
-        ).get()
-
-        Log.d(TAG, "Indy: Validity of Proof: $valid")
-
-
-        // 6. Close my wallet
-        myWallet.closeWallet().get()
-        Log.d(TAG, "Indy: My Wallet was closed")
-
-
-        Log.d(TAG, "Indy: PROOF-REQUEST FOR LOAN-APPLICATION DONE")
 
     }
 

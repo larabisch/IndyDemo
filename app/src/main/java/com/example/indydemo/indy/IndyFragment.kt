@@ -83,6 +83,13 @@ class IndyFragment : Fragment() {
             if (it == true) {
                 loadingDialog.dismissDialog()
                 identityViewModel.setInitializeButtonInvisible()
+
+                val builder = MaterialAlertDialogBuilder(requireContext())
+                builder.setTitle("Finished!")
+                builder.setMessage("The Initialization is done. " +
+                        "Now you can request your Identity-Credential!")
+                builder.setNeutralButton("Thank's!") { _, _ -> }
+                builder.show()
             }
         })
 
@@ -90,7 +97,7 @@ class IndyFragment : Fragment() {
         binding.requestIdentityButton.setOnClickListener {
             val builder = MaterialAlertDialogBuilder(requireContext())
             builder.setTitle("We found your valid Identity!")
-            builder.setMessage("Do you want to Request your Identity-Credential?")
+            builder.setMessage("Do you want to request your Identity-Credential?")
             builder.setPositiveButton("Yes") { _, _ ->
                 loadingDialog.startLoadingDialog()
                 indyViewModel.identityCertificate()
@@ -129,7 +136,8 @@ class IndyFragment : Fragment() {
                 val builder = MaterialAlertDialogBuilder(requireContext())
                 builder.setTitle("Create Proof-Request for Degree-Credential?")
                 builder.setMessage("\nThe following Claims will be used:\n\n" +
-                        " - Family name \n - Given name \n - Address \n - Date of birth \n - Nationality")
+                        " - Family name \n - Given name \n - Address \n - Nationality \n" +
+                        " - ZKP-Proof that you are older than 18")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.degreeRequest()
@@ -183,8 +191,8 @@ class IndyFragment : Fragment() {
                 val builder = MaterialAlertDialogBuilder(requireContext())
                 builder.setTitle("Create Proof-Request for Job-Application?")
                 builder.setMessage("\nThe following Claims will be used:\n\n" +
-                        " - Family name \n - Given name \n - Specialization \n - Degree \n " +
-                        "- Status \n - ZKP-Proof that your average is below 3.0")
+                        " - Family name \n - Given name \n - Specialization \n - Degree \n" +
+                        " - Status \n - ZKP-Proof that your average is better than 3.0")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.jobRequest()
@@ -217,34 +225,7 @@ class IndyFragment : Fragment() {
 
                 val builder = MaterialAlertDialogBuilder(requireContext())
                 builder.setTitle("Congratulation!")
-                builder.setMessage("The Job-Credential was added to your Wallet.")
-                builder.setNeutralButton("Thank's!") { _, _ -> }
-                builder.show()
-            }
-        })
-
-        binding.requestLoanButton.setOnClickListener {
-            val builder = MaterialAlertDialogBuilder(requireContext())
-            builder.setTitle("Create Proof-Request for Loan-Application?")
-            builder.setMessage("\nThe following Claims will be used:\n\n" +
-                    " - Family name \n - Given name \n - Employee status \n" +
-                    " - ZKP-Proof that you are over 18 \n - ZKP-Proof that your salary is over 2000")
-            builder.setPositiveButton("Yes") { _, _ ->
-                loadingDialog.startLoadingDialog()
-                indyViewModel.loanRequest()
-            }
-            builder.setNegativeButton("No") { _, _ -> }
-            builder.show()
-        }
-
-        indyViewModel.proofRequestLoanDone.observe(viewLifecycleOwner, {
-            if (it == true) {
-                loadingDialog.dismissDialog()
-                indyViewModel.loanFinished()
-
-                val builder = MaterialAlertDialogBuilder(requireContext())
-                builder.setTitle("You were accepted!")
-                builder.setMessage("With this the demo is finished.")
+                builder.setMessage("The Job-Credential was added to your Wallet. With this the demo is finished.")
                 builder.setNeutralButton("Thank's!") { _, _ -> }
                 builder.show()
             }
@@ -280,9 +261,6 @@ class IndyFragment : Fragment() {
                 binding.applyJobButton.visibility = View.VISIBLE
                 binding.applyJobButton.startAnimation(fromButton)
 
-                binding.requestLoanButton.visibility = View.VISIBLE
-                binding.requestLoanButton.startAnimation(fromButton)
-
                 binding.addButton.startAnimation(openAnim)
                 indyViewModel.openAnimationDone()
             } else {
@@ -297,9 +275,6 @@ class IndyFragment : Fragment() {
 
                 binding.applyJobButton.visibility = View.INVISIBLE
                 binding.applyJobButton.startAnimation(toButton)
-
-                binding.requestLoanButton.visibility = View.INVISIBLE
-                binding.requestLoanButton.startAnimation(toButton)
 
                 binding.addButton.startAnimation(closeAnim)
                 indyViewModel.closeAnimationDone()
