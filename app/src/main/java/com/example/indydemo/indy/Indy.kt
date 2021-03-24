@@ -30,18 +30,18 @@ class Indy {
     private val governmentWalletCredentials = JSONObject()
             .put("key", "government_wallet_key").toString()
 
-    private val myWalletConfig = JSONObject()
-            .put("id", "myWallet").toString()
-    private val myWalletCredentials = JSONObject()
-            .put("key", "my_wallet_key").toString()
+    private val aliceWalletConfig = JSONObject()
+            .put("id", "aliceWallet").toString()
+    private val aliceWalletCredentials = JSONObject()
+            .put("key", "alice_wallet_key").toString()
 
 
-    private lateinit var myMasterSecretId : String
 
     private var universityDid = "V4SGRU86Z58d6TV7PBUe6f"
     private val companyDid = "Th7MpTaRZVRYnPiabds81Y"
     private var governmentDid = "NcYxiDXkpYi6ov5FcYDi1e"
-    private var myDid = "Qx2KARvFsPcWZJaqF3FbHu"
+    private var aliceDid = "Qx2KARvFsPcWZJaqF3FbHu"
+    private lateinit var aliceMasterSecretId : String
 
 
     private lateinit var identityCredOffer : String
@@ -116,23 +116,22 @@ class Indy {
         Log.d(TAG, "Indy: Company Wallet was created")
 
 
-        // Create My Wallet
+        // Create Alice Wallet
         try {
-            Wallet.deleteWallet(myWalletConfig, myWalletCredentials).get()
+            Wallet.deleteWallet(aliceWalletConfig, aliceWalletCredentials).get()
         } catch (e: ExecutionException) {
             Log.d(TAG, e.toString())
         } catch (e: WalletNotFoundException) {
             Log.d(TAG, e.toString())
         }
-        Wallet.createWallet(myWalletConfig, myWalletCredentials).get()
-        Log.d(TAG, "Indy: My Wallet was created")
+        Wallet.createWallet(aliceWalletConfig, aliceWalletCredentials).get()
+        Log.d(TAG, "Indy: Alice Wallet was created")
 
-        // Open My Wallet and generate Master Secret
-        val myWallet = Wallet.openWallet(myWalletConfig, myWalletCredentials).get()
-        myMasterSecretId = Anoncreds.proverCreateMasterSecret(myWallet, null).get()
-        Log.d(TAG, "Indy: My Master Secret was created")
-        myWallet.closeWallet()
-
+        // Open Alice Wallet and generate Master Secret
+        val aliceWallet = Wallet.openWallet(aliceWalletConfig, aliceWalletCredentials).get()
+        aliceMasterSecretId = Anoncreds.proverCreateMasterSecret(aliceWallet, null).get()
+        Log.d(TAG, "Indy: Alice Master Secret was created")
+        aliceWallet.closeWallet()
 
         Log.d(TAG, "Indy: WALLET INITIALISATION DONE")
     }
@@ -143,13 +142,12 @@ class Indy {
 
         Log.d(TAG, "Indy: CREATE IDENTITY CREDENTIAL OFFER STARTED")
 
-
-        // 1. Open Government Wallet
+        // Open Government Wallet
         val governmentWallet = Wallet.openWallet(governmentWalletConfig, governmentWalletCredentials).get()
         Log.d(TAG, "Indy: Government Wallet opened")
 
 
-        // 3. Government Creates Credential Schema
+        // Government Creates Credential Schema
         val identityCertificateSchemaName = "Identity-Certificate"
         val identityCertificateSchemaVersion = "1.0"
         val identityCertificateSchemaAttributes = JSONArray()
@@ -174,7 +172,7 @@ class Indy {
         Log.d(TAG, "Indy: Government created Credential Schema for Identity-Certificate")
 
 
-        // 4. Government creates Credential Definition
+        // Government creates Credential Definition
         val identityCertificateCredDefTag = "Tag1"
         val identityCertificateCredDefConfigJson = JSONObject()
                 .put("support_revocation", false).toString()
@@ -194,7 +192,7 @@ class Indy {
         Log.d(TAG, "Indy: Government created Credential Definition for Identity-Certificate")
 
 
-        // 5. Government creates Credential Offer
+        // Government creates Credential Offer
         identityCredOffer = Anoncreds.issuerCreateCredentialOffer(
             governmentWallet,
             identityCertificateCredDefId
@@ -203,7 +201,7 @@ class Indy {
         Log.d(TAG, "Indy: Government created Credential Offer for Identity-Certificate")
 
 
-        // 9. Close Government wallet
+        // Close Government wallet
         governmentWallet.closeWallet().get()
         Log.d(TAG, "Indy: Government Wallet was closed")
 
@@ -217,13 +215,12 @@ class Indy {
 
         Log.d(TAG, "Indy: CREATE DEGREE CREDENTIAL OFFER STARTED")
 
-
-        // 1. Open University Wallet
+        // Open University Wallet
         val universityWallet = Wallet.openWallet(universityWalletConfig, universityWalletCredentials).get()
         Log.d(TAG, "Indy: University Wallet was opened")
 
 
-        // 3. University Creates Credential Schema
+        // University Creates Credential Schema
         val bachelorCertificateSchemaName = "Degree-Certificate"
         val bachelorCertificateSchemaVersion = "1.0"
         val bachelorCertificateSchemaAttributes = JSONArray()
@@ -249,7 +246,7 @@ class Indy {
         Log.d(TAG, "Indy: University created Credential Schema for Degree-Certificate")
 
 
-        // 4. University create Credential Definition
+        // University create Credential Definition
         val bachelorCertificateCredDefTag = "Tag1"
         val bachelorCertificateCredDefConfigJson = JSONObject()
                 .put("support_revocation", false).toString()
@@ -269,7 +266,7 @@ class Indy {
         Log.d(TAG, "Indy: University created Credential Definition for Degree-Certificate")
 
 
-        // 5. University Creates Credential Offer
+        // University Creates Credential Offer
         degreeCredOffer = Anoncreds.issuerCreateCredentialOffer(
             universityWallet,
             degreeCertificateCredDefId
@@ -277,7 +274,8 @@ class Indy {
 
         Log.d(TAG, "Indy: University created Credential Offer for Degree-Certificate")
 
-        // 10. Close Government wallet
+
+        // Close Government wallet
         universityWallet.closeWallet().get()
         Log.d(TAG, "Indy: University Wallet was closed")
 
@@ -291,12 +289,12 @@ class Indy {
 
         Log.d(TAG, "Indy: CREATE JOB CREDENTIAL OFFER STARTED")
 
-        // 1. Open Company Wallet
+        // Open Company Wallet
         val companyWallet = Wallet.openWallet(companyWalletConfig, companyWalletCredentials).get()
         Log.d(TAG, "Indy: Company Wallet was opened")
 
 
-        // 3. Company Creates Credential Schema
+        // Company Creates Credential Schema
         val jobCertificateSchemaName = "Job-Certificate"
         val jobCertificateSchemaVersion = "1.0"
         val jobCertificateSchemaAttributes = JSONArray()
@@ -320,7 +318,7 @@ class Indy {
         Log.d(TAG, "Indy: Company created Credential Schema for Job-Certificate")
 
 
-        // 4. Company create Credential Definition
+        // Company create Credential Definition
         val jobCertificateCredDefTag = "Tag1"
         val jobCertificateCredDefConfigJson = JSONObject()
                 .put("support_revocation", false).toString()
@@ -340,7 +338,7 @@ class Indy {
         Log.d(TAG, "Indy: Company created Credential Definition for Job-Certificate")
 
 
-        // 5. Company Creates Credential Offer
+        // Company Creates Credential Offer
         jobCredOffer = Anoncreds.issuerCreateCredentialOffer(
                 companyWallet,
                 jobCertificateCredDefId
@@ -348,7 +346,7 @@ class Indy {
 
         Log.d(TAG, "Indy: Company created Credential Offer for Job-Certificate")
 
-        // 9. Close Company wallet
+        // Close Company wallet
         companyWallet.closeWallet().get()
         Log.d(TAG, "Indy: Company Wallet was closed")
 
@@ -362,8 +360,7 @@ class Indy {
 
         Log.d(TAG, "Indy: CREATE PROOF-REQUEST DEGREE-CERTIFICATE STARTED")
 
-
-        // 2. I Get Credentials for Proof Request
+        // Get Credentials for Proof Request
         val degreeRequestNonce = Anoncreds.generateNonce().get()
 
         degreeRequestProofRequestJson = JSONObject()
@@ -395,8 +392,7 @@ class Indy {
 
         Log.d(TAG, "Indy: CREATE PROOF-REQUEST JOB-APPLICATION STARTED")
 
-
-        // 2. Prover Gets Credentials for Proof Request
+        // Get Credentials for Proof Request
         val jobApplicationNonce = Anoncreds.generateNonce().get()
 
         jobApplicationProofRequestJson = JSONObject()
@@ -431,29 +427,29 @@ class Indy {
 
         Log.d(TAG, "Indy: REQUEST IDENTITY CERTIFICATE STARTED")
 
-
-        // 1. Open Government Wallet
+        // Open Government Wallet
         val governmentWallet = Wallet.openWallet(governmentWalletConfig, governmentWalletCredentials).get()
         Log.d(TAG, "Indy: Government Wallet opened")
 
-        // 2. Open My Wallet
-        val myWallet = Wallet.openWallet(myWalletConfig, myWalletCredentials).get()
-        Log.d(TAG, "Indy: My Wallet opened")
+        // Open Alice Wallet
+        val aliceWallet = Wallet.openWallet(aliceWalletConfig, aliceWalletCredentials).get()
+        Log.d(TAG, "Indy: Alice Wallet opened")
 
-        // 6. I Create Credential Request
+
+        // Create Credential Request
         val identityCreateCredReqResult = Anoncreds.proverCreateCredentialReq(
-            myWallet,
-            myDid,
+            aliceWallet,
+            aliceDid,
             identityCredOffer,
             identityCertificateCredDefJson,
-            myMasterSecretId
+            aliceMasterSecretId
         ).get()
         val identityCredReqJson = identityCreateCredReqResult.credentialRequestJson
         val identityCredReqMetadataJson = identityCreateCredReqResult.credentialRequestMetadataJson
-        Log.d(TAG, "Indy: I created Credential Request for Identity-Certificate")
+        Log.d(TAG, "Indy: Created Credential Request for Identity-Certificate")
 
 
-        // 7. Government creates Credential
+        // Government creates Credential
         val identityCredValuesJson = JSONObject()
             .put("family_name", JSONObject()
                     .put("raw", "Garcia")
@@ -489,9 +485,9 @@ class Indy {
         Log.d(TAG, "Indy: Government created Credential for Identity-Certificate")
 
 
-        // 8. Prover Stores Credential
+        // Store Credential
         Anoncreds.proverStoreCredential(
-            myWallet,
+            aliceWallet,
             null,
             identityCredReqMetadataJson,
             identityCredential,
@@ -499,15 +495,15 @@ class Indy {
             null
         ).get()
 
-        Log.d(TAG, "Indy: I store the Credential")
+        Log.d(TAG, "Indy: Stored the Credential")
 
-        // 9. Close Government wallet
+        // Close Government wallet
         governmentWallet.closeWallet().get()
         Log.d(TAG, "Indy: Government Wallet was closed")
 
-        // 10. Close My wallet
-        myWallet.closeWallet().get()
-        Log.d(TAG, "Indy: My Wallet was closed")
+        // Close Alice wallet
+        aliceWallet.closeWallet().get()
+        Log.d(TAG, "Indy: Alice Wallet was closed")
 
         Log.d(TAG, "Indy: REQUEST IDENTITY CERTIFICATE DONE")
 
@@ -515,20 +511,18 @@ class Indy {
 
 
 
-
     fun proofRequestDegreeCertificate() {
 
         Log.d(TAG, "Indy: PROOF-REQUEST FOR DEGREE-CERTIFICATE STARTED")
 
+        // Open Alice Wallet
+        val aliceWallet = Wallet.openWallet(aliceWalletConfig, aliceWalletCredentials).get()
+        Log.d(TAG, "Indy: Alice Wallet was opened")
 
-        // 1. Open My Wallet
-        val myWallet = Wallet.openWallet(myWalletConfig, myWalletCredentials).get()
-        Log.d(TAG, "Indy: My Wallet was opened")
 
-
-        // 3. I Search for all requested Credentials
+        // Search for all requested attributes for the Proof
         val degreeRequestCredentialsSearch = CredentialsSearchForProofReq
-                .open(myWallet, degreeRequestProofRequestJson, null).get()
+                .open(aliceWallet, degreeRequestProofRequestJson, null).get()
 
         val degreeRequestCredentialsForAttribute1 = JSONArray(degreeRequestCredentialsSearch
                 .fetchNextCredentials("attr1_referent", 100).get())
@@ -551,7 +545,6 @@ class Indy {
 
         Log.d(TAG, "Indy: Search for Attribute 3: $degreeRequestCredentialsForAttribute3")
 
-
         val degreeRequestCredentialsForAttribute4 = JSONArray(degreeRequestCredentialsSearch
                 .fetchNextCredentials("attr4_referent", 100).get())
         val degreeRequestCredentialIdForAttribute4 = degreeRequestCredentialsForAttribute4
@@ -560,6 +553,7 @@ class Indy {
         Log.d(TAG, "Indy: Search for Attribute 4: $degreeRequestCredentialsForAttribute4")
 
 
+        // Search for all requested predicates for the Proof
         val degreeRequestCredentialsForPredicate = JSONArray(degreeRequestCredentialsSearch
                 .fetchNextCredentials("predicate1_referent", 100).get())
         val degreeRequestCredentialIdForPredicate = degreeRequestCredentialsForPredicate
@@ -567,14 +561,14 @@ class Indy {
 
         Log.d(TAG, "Indy: Search for Predicate: $degreeRequestCredentialIdForPredicate")
 
-        Log.d(TAG, "Indy: I searched for all attributes for Proof-Request for Degree-Certificate")
+        Log.d(TAG, "Indy: Searched for all attributes for Proof-Request for Degree-Certificate")
 
 
         degreeRequestCredentialsSearch.close()
-        Log.d(TAG, "Indy: I searched for all requested Credentials of Proof-Request for Degree-Certificate")
+        Log.d(TAG, "Indy: Searched for all requested Credentials of Proof-Request for Degree-Certificate")
 
 
-        // 4. I create Proof
+        // Create Proof
         val degreeRequestedCredentialsJson = JSONObject()
                 .put("self_attested_attributes", JSONObject())
                 .put("requested_attributes", JSONObject()
@@ -614,10 +608,10 @@ class Indy {
         var degreeRequestProofJson = ""
         try {
             degreeRequestProofJson = Anoncreds.proverCreateProof(
-                myWallet,
+                aliceWallet,
                 degreeRequestProofRequestJson,
                 degreeRequestedCredentialsJson,
-                myMasterSecretId,
+                aliceMasterSecretId,
                 degreeRequestSchemas,
                 degreeRequestCredentialDefs,
                 degreeRequestRevocStates
@@ -631,7 +625,7 @@ class Indy {
         Log.d(TAG, "Indy: Proof Creation of Proof-Request for Degree-Certificate done")
 
 
-        // 5. Verifier verifies Proof
+        // Verifier verifies Proof
         val revealedAttr1 = degreeRequestProof.getJSONObject("requested_proof")
                 .getJSONObject("revealed_attrs").getJSONObject("attr1_referent")
         Log.d(TAG, "Indy: Revealed attribute 1: $revealedAttr1")
@@ -653,10 +647,9 @@ class Indy {
         Log.d(TAG, "Indy: Validity of Proof: $valid")
 
 
-        // 6. Close my wallet
-        myWallet.closeWallet().get()
-        Log.d(TAG, "Indy: My Wallet was closed")
-
+        // Close Alice wallet
+        aliceWallet.closeWallet().get()
+        Log.d(TAG, "Indy: Alice Wallet was closed")
 
         Log.d(TAG, "Indy: PROOF-REQUEST FOR DEGREE-CERTIFICATE DONE")
 
@@ -668,32 +661,31 @@ class Indy {
 
         Log.d(TAG, "Indy: CREDENTIAL FOR DEGREE-CERTIFICATE STARTED")
 
-
-        // 1. Open University Wallet
+        // Open University Wallet
         val universityWallet = Wallet.openWallet(universityWalletConfig, universityWalletCredentials).get()
         Log.d(TAG, "Indy: University Wallet was opened")
 
-        // 2. Open My Wallet
-        val myWallet = Wallet.openWallet(myWalletConfig, myWalletCredentials).get()
-        Log.d(TAG, "Indy: My Wallet was opened")
+        // Open Alice Wallet
+        val aliceWallet = Wallet.openWallet(aliceWalletConfig, aliceWalletCredentials).get()
+        Log.d(TAG, "Indy: Alice Wallet was opened")
 
 
-        // 6. I Create Credential Request
+        // Create Credential Request
         val bachelorCreateCredReqResult = Anoncreds.proverCreateCredentialReq(
-            myWallet,
-            myDid,
+            aliceWallet,
+            aliceDid,
             degreeCredOffer,
             degreeCertificateCredDefJson,
-            myMasterSecretId
+            aliceMasterSecretId
         ).get()
 
         val bachelorCredReqJson = bachelorCreateCredReqResult.credentialRequestJson
         val bachelorCredReqMetadataJson = bachelorCreateCredReqResult.credentialRequestMetadataJson
 
-        Log.d(TAG, "Indy: I create Credential Request for Degree-Certificate")
+        Log.d(TAG, "Indy: Created Credential Request for Degree-Certificate")
 
 
-        // 7. University create Credential
+        // University create Credential
         val bachelorCredValuesJson = JSONObject()
             .put("given_names", JSONObject()
                     .put("raw", "Alice")
@@ -703,13 +695,13 @@ class Indy {
                     .put("encoded", "5321642780241790123587902456789123452"))
             .put("specialization", JSONObject()
                     .put("raw", "Computer science")
-                    .put("encoded", "12434523576212321"))
+                    .put("encoded", "341257452171890758595834870776995707090391141060"))
             .put("degree", JSONObject()
                     .put("raw", "Bachelor of Science")
-                    .put("encoded", "12434523576212321"))
+                    .put("encoded", "1199049847391873865418403176279550347658772583658"))
             .put("status", JSONObject()
-                    .put("raw", "graduated")
-                    .put("encoded", "2213454313412354"))
+                    .put("raw", "Graduated")
+                    .put("encoded", "1064541674305188056974032337435623050260045088296"))
             .put("year", JSONObject()
                     .put("raw", "2020")
                     .put("encoded", "2020"))
@@ -732,9 +724,9 @@ class Indy {
         Log.d(TAG, "Indy: University created Credential for Degree-Certificate")
 
 
-        // 8. Prover Stores Credential
+        // Store Credential
         Anoncreds.proverStoreCredential(
-            myWallet,
+            aliceWallet,
             null,
             bachelorCredReqMetadataJson,
             bachelorCredential,
@@ -742,16 +734,15 @@ class Indy {
             null
         ).get()
 
-        Log.d(TAG, "Indy: I store Credential for Degree-Certificate")
+        Log.d(TAG, "Indy: Stored Credential for Degree-Certificate")
 
-        // 10. Close Government wallet
+        // Close Government wallet
         universityWallet.closeWallet().get()
         Log.d(TAG, "Indy: University Wallet was closed")
 
-        // 11. Close my wallet
-        myWallet.closeWallet().get()
-        Log.d(TAG, "Indy: My Wallet was closed")
-
+        // Close Alice wallet
+        aliceWallet.closeWallet().get()
+        Log.d(TAG, "Indy: Alice Wallet was closed")
 
         Log.d(TAG, "Indy: CREDENTIAL FOR DEGREE-CERTIFICATE DONE")
 
@@ -763,58 +754,49 @@ class Indy {
 
         Log.d(TAG, "Indy: PROOF-REQUEST FOR JOB-APPLICATION STARTED")
 
+        // Open Alice Wallet
+        val aliceWallet = Wallet.openWallet(aliceWalletConfig, aliceWalletCredentials).get()
+        Log.d(TAG, "Indy: Alice Wallet was opened")
 
-        // 1. Open My Wallet
-        val myWallet = Wallet.openWallet(myWalletConfig, myWalletCredentials).get()
-        Log.d(TAG, "Indy: My Wallet was opened")
 
-
-        // 3. I Search for all requested Credentials
-
+        // Search for all requested attributes for the Proof
         val jobApplicationCredentialsSearch = CredentialsSearchForProofReq
-                .open(myWallet, jobApplicationProofRequestJson, null).get()
+                .open(aliceWallet, jobApplicationProofRequestJson, null).get()
 
         val jobApplicationCredentialsForAttribute1 = JSONArray(jobApplicationCredentialsSearch
                 .fetchNextCredentials("attr1_referent", 100).get())
         val jobApplicationCredentialIdForAttribute1 = jobApplicationCredentialsForAttribute1
                 .getJSONObject(0).getJSONObject("cred_info").getString("referent")
-
         Log.d(TAG, "Indy: Search for Attribute 1: $jobApplicationCredentialsForAttribute1")
-
 
         val jobApplicationCredentialsForAttribute2 = JSONArray(jobApplicationCredentialsSearch
                 .fetchNextCredentials("attr2_referent", 100).get())
         val jobApplicationCredentialIdForAttribute2 = jobApplicationCredentialsForAttribute2
                 .getJSONObject(0).getJSONObject("cred_info").getString("referent")
-
         Log.d(TAG, "Indy: Search for Attribute 2: $jobApplicationCredentialsForAttribute2")
-
 
         val jobApplicationCredentialsForAttribute3 = JSONArray(jobApplicationCredentialsSearch
                 .fetchNextCredentials("attr3_referent", 100).get())
         val jobApplicationCredentialIdForAttribute3 = jobApplicationCredentialsForAttribute3
                 .getJSONObject(0).getJSONObject("cred_info").getString("referent")
-
         Log.d(TAG, "Indy: Search for Attribute 3: $jobApplicationCredentialsForAttribute3")
-
 
         val jobApplicationCredentialsForAttribute4 = JSONArray(jobApplicationCredentialsSearch
                 .fetchNextCredentials("attr4_referent", 100).get())
         val jobApplicationCredentialIdForAttribute4 = jobApplicationCredentialsForAttribute4
                 .getJSONObject(0).getJSONObject("cred_info").getString("referent")
-
         Log.d(TAG, "Indy: Search for Attribute 4: $jobApplicationCredentialsForAttribute4")
 
         val jobApplicationCredentialsForAttribute5 = JSONArray(jobApplicationCredentialsSearch
                 .fetchNextCredentials("attr5_referent", 100).get())
         val jobApplicationCredentialIdForAttribute5 = jobApplicationCredentialsForAttribute5
                 .getJSONObject(0).getJSONObject("cred_info").getString("referent")
-
         Log.d(TAG, "Indy: Search for Attribute 5: $jobApplicationCredentialsForAttribute5")
 
-        Log.d(TAG, "Indy: Prover searched for all attributes of Proof-Request for Job-Application")
+        Log.d(TAG, "Indy: Searched for all attributes of Proof-Request for Job-Application")
 
 
+        // Search for all requested predicates for the Proof
         val jobApplicationCredentialsForPredicate = JSONArray(jobApplicationCredentialsSearch
                 .fetchNextCredentials("predicate1_referent", 100).get())
         val jobApplicationCredentialIdForPredicate = jobApplicationCredentialsForPredicate
@@ -822,14 +804,14 @@ class Indy {
 
         Log.d(TAG, "Indy: Search for Predicate: $jobApplicationCredentialIdForPredicate")
 
-        Log.d(TAG, "Indy: Prover searched for all Predicates of Proof-Request for Job-Application")
+        Log.d(TAG, "Indy: Searched for all predicates of Proof-Request for Job-Application")
 
 
         jobApplicationCredentialsSearch.close()
-        Log.d(TAG, "Indy: I searched for all requested Credentials of Proof-Request for Job-Application")
+        Log.d(TAG, "Indy: Search closed")
 
 
-        // 4. I Create Proof
+        // Create Proof
         val jobApplicationRequestedCredentialsJson = JSONObject()
             .put("self_attested_attributes", JSONObject() )
             .put("requested_attributes", JSONObject()
@@ -874,10 +856,10 @@ class Indy {
         var jobApplicationProofJson = ""
         try {
             jobApplicationProofJson = Anoncreds.proverCreateProof(
-                myWallet,
+                aliceWallet,
                 jobApplicationProofRequestJson,
                 jobApplicationRequestedCredentialsJson,
-                myMasterSecretId,
+                aliceMasterSecretId,
                 jobApplicationSchemas,
                 jobApplicationCredentialDefs,
                 jobApplicationRevocStates
@@ -891,7 +873,7 @@ class Indy {
         Log.d(TAG, "Indy: Proof Creation of Proof-Request for Job-Application done")
 
 
-        // 5. Verifier verifies Proof
+        // Verifier verifies Proof
         val revealedAttr1 = jobApplicationProof.getJSONObject("requested_proof")
                 .getJSONObject("revealed_attrs").getJSONObject("attr1_referent")
 
@@ -914,9 +896,9 @@ class Indy {
         Log.d(TAG, "Indy: Validity of Proof: $valid")
 
 
-        // 6. Close my wallet
-        myWallet.closeWallet().get()
-        Log.d(TAG, "Indy: My Wallet Closed")
+        // Close Alice wallet
+        aliceWallet.closeWallet().get()
+        Log.d(TAG, "Indy: Alice Wallet Closed")
 
         Log.d(TAG, "Indy: PROOF-REQUEST FOR JOB-APPLICATION DONE")
 
@@ -927,30 +909,29 @@ class Indy {
 
         Log.d(TAG, "Indy: CREDENTIAL FOR JOB-APPLICATION STARTED")
 
-
-        // 1. Open Company Wallet
+        // Open Company Wallet
         val companyWallet = Wallet.openWallet(companyWalletConfig, companyWalletCredentials).get()
         Log.d(TAG, "Indy: Company Wallet was opened")
 
-        // 2. Open My Wallet
-        val myWallet = Wallet.openWallet(myWalletConfig, myWalletCredentials).get()
-        Log.d(TAG, "Indy: My Wallet was opened")
+        // Open Alice Wallet
+        val aliceWallet = Wallet.openWallet(aliceWalletConfig, aliceWalletCredentials).get()
+        Log.d(TAG, "Indy: Alice Wallet was opened")
 
 
-        // 6. I Create Credential Request
+        // Create Credential Request
         val jobCreateCredReqResult = Anoncreds.proverCreateCredentialReq(
-            myWallet,
-            myDid,
+            aliceWallet,
+            aliceDid,
             jobCredOffer,
             jobCertificateCredDefJson,
-            myMasterSecretId
+            aliceMasterSecretId
         ).get()
         val jobCredReqJson = jobCreateCredReqResult.credentialRequestJson
         val jobCredReqMetadataJson = jobCreateCredReqResult.credentialRequestMetadataJson
-        Log.d(TAG, "Indy: I created Credential Request for Job-Certificate")
+        Log.d(TAG, "Indy: Created Credential Request for Job-Certificate")
 
 
-        // 7. Company create Credential
+        // Company create Credential
         val jobCredValuesJson = JSONObject()
             .put("given_names", JSONObject()
                     .put("raw", "Alice")
@@ -983,9 +964,9 @@ class Indy {
         Log.d(TAG, "Indy: Company created Credential for Job-Certificate")
 
 
-        // 8. Prover Stores Credential
+        // Store Credential
         Anoncreds.proverStoreCredential(
-            myWallet,
+            aliceWallet,
             null,
             jobCredReqMetadataJson,
             jobCredential,
@@ -993,15 +974,16 @@ class Indy {
             null
         ).get()
 
-        Log.d(TAG, "Indy: Prover stores Credential")
+        Log.d(TAG, "Indy: Stored Credential")
 
-        // 9. Close Company wallet
+
+        // Close Company wallet
         companyWallet.closeWallet().get()
         Log.d(TAG, "Indy: Company Wallet was closed")
 
-        // 10. Close My wallet
-        myWallet.closeWallet().get()
-        Log.d(TAG, "Indy: My Wallet was closed")
+        // Close Alice wallet
+        aliceWallet.closeWallet().get()
+        Log.d(TAG, "Indy: Alice Wallet was closed")
 
         Log.d(TAG, "Indy: CREDENTIAL FOR JOB-APPLICATION DONE")
 

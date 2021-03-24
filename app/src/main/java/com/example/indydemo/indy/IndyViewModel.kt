@@ -20,35 +20,7 @@ class IndyViewModel(val database: CredentialDao, context: Context, application: 
 
     init {
         viewModelScope.launch { deleteAll() }
-
-        viewModelScope.launch { all() }
     }
-
-
-    private suspend fun all() {
-        withContext(Dispatchers.Default) {
-            indy.loadLibrary(environmentPath)
-            indy.initializeWallets()
-
-            indy.createIdentityCredOffer()
-            indy.createDegreeCredOffer()
-            indy.createJobCredOffer()
-
-            indy.createProofRequestDegreeCertificate()
-            indy.createProofRequestJobApplication()
-
-            indy.requestIdentityCertificate()
-
-            indy.proofRequestDegreeCertificate()
-            indy.requestDegreeCertificate()
-
-            indy.proofRequestApplicationJob()
-            indy.requestJobCertificate()
-
-        }
-    }
-
-
 
 
 
@@ -175,95 +147,6 @@ class IndyViewModel(val database: CredentialDao, context: Context, application: 
 
 
 
-
-/*
-
-
-    fun initialise() {
-        val handler = Handler()
-        handler.postDelayed({
-            viewModelScope.launch {
-                setVariables()
-                deleteAll()
-                initialisationSuccess()
-            }
-        }, 3000)
-    }
-
-    fun identityCertificate() {
-        val handler = Handler()
-        handler.postDelayed({
-            viewModelScope.launch {
-                insert(Credential(null, IdentityCredential.document, IdentityCredential.issuer,
-                        IdentityCredential.attribute1_name, IdentityCredential.attribute1_value,
-                        IdentityCredential.attribute2_name, IdentityCredential.attribute2_value,
-                        IdentityCredential.attribute3_name, IdentityCredential.attribute3_value,
-                        IdentityCredential.attribute4_name, IdentityCredential.attribute4_value,
-                        IdentityCredential.attribute5_name, IdentityCredential.attribute5_value,
-                ))
-                identificationSuccess()
-            }
-        }, 3000)
-    }
-
-    fun degreeRequest() {
-        val handler = Handler()
-        handler.postDelayed({
-            viewModelScope.launch {
-                proofRequestDegreeDone()
-            }
-        }, 3000)
-    }
-
-    fun degreeCertificate() {
-        val handler = Handler()
-        handler.postDelayed({
-            viewModelScope.launch {
-                insert(Credential(null, DegreeCredential.document, DegreeCredential.issuer,
-                        DegreeCredential.attribute1_name, DegreeCredential.attribute1_value,
-                        DegreeCredential.attribute2_name, DegreeCredential.attribute2_value,
-                        DegreeCredential.attribute3_name, DegreeCredential.attribute3_value,
-                        DegreeCredential.attribute4_name, DegreeCredential.attribute4_value,
-                        DegreeCredential.attribute5_name, DegreeCredential.attribute5_value,
-                ))
-                degreeCredentialSuccess()
-            }
-        }, 3000)
-    }
-
-    fun jobRequest() {
-        val handler = Handler()
-        handler.postDelayed({
-            viewModelScope.launch {
-                proofRequestJobSuccess()
-            }
-        }, 3000)
-    }
-
-    fun jobCertificate() {
-        val handler = Handler()
-        handler.postDelayed({
-            viewModelScope.launch {
-                insert(Credential(null, JobCredential.document, JobCredential.issuer,
-                        JobCredential.attribute1_name, JobCredential.attribute1_value,
-                        JobCredential.attribute2_name, JobCredential.attribute2_value,
-                        JobCredential.attribute3_name, JobCredential.attribute3_value,
-                        JobCredential.attribute4_name, JobCredential.attribute4_value,
-                        JobCredential.attribute5_name, JobCredential.attribute5_value,
-                ))
-                jobCredentialSuccess()
-            }
-        }, 3000)
-    }
-
-
-*/
-
-
-
-
-
-
     private suspend fun initialiseDemo() {
         withContext(Dispatchers.Default) {
             indy.initializeWallets()
@@ -274,7 +157,6 @@ class IndyViewModel(val database: CredentialDao, context: Context, application: 
             indy.createProofRequestJobApplication()
         }
     }
-
 
     private suspend fun getIdentityCertificate() {
         withContext(Dispatchers.Default) {
