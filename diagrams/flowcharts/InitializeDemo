@@ -1,0 +1,12 @@
+@startuml
+
+:Initialize Wallets;
+:Create Identity-Credential Offer;
+:Create Degree-Credential Offer;
+:Create Job-Credential Offer;
+:Create Proof-Request \n for Degree-Certificate;
+:Create Proof-Request \n for Job-Application;
+
+@enduml
+
+

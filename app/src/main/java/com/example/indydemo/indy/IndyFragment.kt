@@ -207,8 +207,8 @@ class IndyFragment : Fragment() {
                 loadingDialog.dismissDialog()
 
                 val builder = MaterialAlertDialogBuilder(requireContext())
-                builder.setTitle("You were accepted!")
-                builder.setMessage("Request your Job-Credential?")
+                builder.setTitle("Request your Job-Credential?")
+                builder.setMessage("Your Job-Application was successful!")
                 builder.setPositiveButton("Yes") { _, _ ->
                     loadingDialog.startLoadingDialog()
                     indyViewModel.jobCertificate()

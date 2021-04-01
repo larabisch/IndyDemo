@@ -446,7 +446,7 @@ class Indy {
         ).get()
         val identityCredReqJson = identityCreateCredReqResult.credentialRequestJson
         val identityCredReqMetadataJson = identityCreateCredReqResult.credentialRequestMetadataJson
-        Log.d(TAG, "Indy: Created Credential Request for Identity-Certificate")
+        Log.d(TAG, "Indy: Create Credential Request for Identity-Certificate")
 
 
         // Government creates Credential
@@ -470,6 +470,9 @@ class Indy {
                     .put("raw", "Identity card")
                     .put("encoded", "144992736518735056036859271803104200336197691206"))
             .toString()
+
+        Log.d(TAG, "Indy: JSON for Credential of Identity-Certificate finished")
+
 
         val identityCertificateCreateCredentialResult = Anoncreds.issuerCreateCredential(
             governmentWallet,
@@ -495,7 +498,7 @@ class Indy {
             null
         ).get()
 
-        Log.d(TAG, "Indy: Stored the Credential")
+        Log.d(TAG, "Indy: Stored Credential")
 
         // Close Government wallet
         governmentWallet.closeWallet().get()
@@ -511,7 +514,7 @@ class Indy {
 
 
 
-    fun proofRequestDegreeCertificate() {
+    fun proofDegreeCertificate() {
 
         Log.d(TAG, "Indy: PROOF-REQUEST FOR DEGREE-CERTIFICATE STARTED")
 
@@ -520,7 +523,7 @@ class Indy {
         Log.d(TAG, "Indy: Alice Wallet was opened")
 
 
-        // Search for all requested attributes for the Proof
+            // Search for all requested attributes for the Proof
         val degreeRequestCredentialsSearch = CredentialsSearchForProofReq
                 .open(aliceWallet, degreeRequestProofRequestJson, null).get()
 
@@ -596,7 +599,7 @@ class Indy {
                 )
                 .toString()
 
-        Log.d(TAG, "Indy: JSON for Proof-Request for Degree-Certificate finished")
+        Log.d(TAG, "Indy: JSON for Proof for Degree-Certificate finished")
 
 
         val degreeRequestSchemas: String = JSONObject()
@@ -710,6 +713,9 @@ class Indy {
                     .put("encoded", "17"))
             .toString()
 
+        Log.d(TAG, "Indy: JSON for Credential of Degree-Certificate finished")
+
+
         val bachelorCertificateCreateCredentialResult = Anoncreds.issuerCreateCredential(
             universityWallet,
             degreeCredOffer,
@@ -750,7 +756,7 @@ class Indy {
 
 
 
-    fun proofRequestApplicationJob() {
+    fun proofApplicationJob() {
 
         Log.d(TAG, "Indy: PROOF-REQUEST FOR JOB-APPLICATION STARTED")
 
@@ -843,7 +849,7 @@ class Indy {
             )
             .toString()
 
-        Log.d(TAG, "Indy: JSON for Proof-Request for Job-Application finished")
+        Log.d(TAG, "Indy: JSON for Proof for Job-Application finished")
 
 
         val jobApplicationSchemas: String = JSONObject()
