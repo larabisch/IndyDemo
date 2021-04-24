@@ -166,7 +166,7 @@ class IndyViewModel(val database: CredentialDao, context: Context, application: 
 
     private suspend fun requestDegree() {
         withContext(Dispatchers.Default) {
-            indy.proofRequestDegreeCertificate()
+            indy.proofDegreeCertificate()
         }
     }
 
@@ -178,7 +178,7 @@ class IndyViewModel(val database: CredentialDao, context: Context, application: 
 
     private suspend fun requestJob() {
         withContext(Dispatchers.Default) {
-            indy.proofRequestApplicationJob()
+            indy.proofApplicationJob()
         }
     }
 
